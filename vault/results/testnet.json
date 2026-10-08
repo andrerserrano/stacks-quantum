@@ -1,0 +1,183 @@
+{
+ "network": "testnet",
+ "scheme": "wots",
+ "deployer": "STYYMGK95AP90AM43C2PXKXD1RM1HWH3Y8X02AFS",
+ "recipient": "ST1541NT5PPDCA6VE5T15MA3W0MJMR9DW8ZFJNN79",
+ "txs": {
+  "deploy pq-verifier-trait": {
+   "txid": "0x0b76d082810aa618e879be7b922b3db18489937c000155e780f14bef826c767c",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 643,
+   "fee": "150000",
+   "cost": {
+    "runtime": 26720,
+    "readCount": 1,
+    "readLength": 1,
+    "writeCount": 2,
+    "writeLength": 529
+   }
+  },
+  "deploy wots": {
+   "txid": "0xbabbeff24c8986dac1b4f87bf5969652f091444815f34c3ac1a018178f600d35",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 3417,
+   "fee": "150000",
+   "cost": {
+    "runtime": 177143,
+    "readCount": 1,
+    "readLength": 1,
+    "writeCount": 2,
+    "writeLength": 3779
+   }
+  },
+  "deploy lamport": {
+   "txid": "0xe4d2d54d2c341e7b2c49d2220bc7f76b2eafac3518adeac1c288731e8c220400",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 2280,
+   "fee": "150000",
+   "cost": {
+    "runtime": 116918,
+    "readCount": 1,
+    "readLength": 1,
+    "writeCount": 2,
+    "writeLength": 2429
+   }
+  },
+  "deploy sbtc-token": {
+   "txid": "0x0447a81ef2dc345beadb7bfb4ef404ccc80d62b468942ab38a4bb203858ee616",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 969,
+   "fee": "150000",
+   "cost": {
+    "runtime": 46574,
+    "readCount": 1,
+    "readLength": 1,
+    "writeCount": 4,
+    "writeLength": 931
+   }
+  },
+  "deploy pq-vault": {
+   "txid": "0xa6250e3711a77e39e3d4666004e1e8047140c3500ef64819c9d9a2f1f1282ae4",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 5896,
+   "fee": "150000",
+   "cost": {
+    "runtime": 360634,
+    "readCount": 4,
+    "readLength": 51,
+    "writeCount": 3,
+    "writeLength": 6867
+   }
+  },
+  "open": {
+   "txid": "0x5bd5a4f1ead9fa823ade99bbb37782abf89cbc92f2e96be66c7cf6949de9232b",
+   "status": "success",
+   "result": "(ok 0x3fb94591fd63a6e503560279da332017bd685fe006e32de5a2f39afc3859ad57)",
+   "bytes": 219,
+   "fee": "30000",
+   "cost": {
+    "runtime": 48886,
+    "readCount": 4,
+    "readLength": 5886,
+    "writeCount": 1,
+    "writeLength": 187
+   }
+  },
+  "deposit STX": {
+   "txid": "0x2679f3789b9b93e5e095f0dd9bd4a4d8f0bca4e02288e727bffbad70a6795df6",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 248,
+   "fee": "30000",
+   "cost": {
+    "runtime": 12926,
+    "readCount": 6,
+    "readLength": 6074,
+    "writeCount": 2,
+    "writeLength": 188
+   }
+  },
+  "mint mock sBTC": {
+   "txid": "0xe5d5ede1d67a1278e0d845cb5477b3954b07d8bb04cec10108463ca5ca04e8c8",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 196,
+   "fee": "30000",
+   "cost": {
+    "runtime": 2826,
+    "readCount": 5,
+    "readLength": 856,
+    "writeCount": 2,
+    "writeLength": 1
+   }
+  },
+  "deposit sBTC": {
+   "txid": "0x382543ffa4739d5500f58b9075e1e484e3a5c65ca2e0379c8de15e632436b670",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 286,
+   "fee": "30000",
+   "cost": {
+    "runtime": 11449,
+    "readCount": 10,
+    "readLength": 6929,
+    "writeCount": 3,
+    "writeLength": 188
+   }
+  },
+  "altered": {
+   "txid": "0xc8028440b3e9ec69d0c118c77be0a0b9009cedffaa01b76879e948206379546a",
+   "status": "abort_by_response",
+   "result": "(err u205)",
+   "bytes": 2882,
+   "fee": "30000",
+   "cost": {
+    "runtime": 1328119,
+    "readCount": 8,
+    "readLength": 9795,
+    "writeCount": 1,
+    "writeLength": 187
+   }
+  },
+  "withdraw": {
+   "txid": "0x04d2a6979098c2ad488624d6be779f823e34426e9a535f282db9e88e5a7458b9",
+   "status": "success",
+   "result": "(ok true)",
+   "bytes": 2882,
+   "fee": "30000",
+   "cost": {
+    "runtime": 1226990,
+    "readCount": 9,
+    "readLength": 9796,
+    "writeCount": 2,
+    "writeLength": 188
+   }
+  },
+  "replay": {
+   "txid": "0xd1ed0b0b8cf3c97fca6942fe55a11ed3a142291c0e9786303585524aeda4c9c2",
+   "status": "abort_by_response",
+   "result": "(err u203)",
+   "bytes": 2882,
+   "fee": "30000",
+   "cost": {
+    "runtime": 41206,
+    "readCount": 4,
+    "readLength": 6073,
+    "writeCount": 0,
+    "writeLength": 0
+   }
+  }
+ },
+ "vaultId": "3fb94591fd63a6e503560279da332017bd685fe006e32de5a2f39afc3859ad57",
+ "vault": {
+  "nonce": 1,
+  "stx": "4000000",
+  "sbtc": "1000000",
+  "key": "0xa458000f4117817b404b8d0db9fa5eb478ae5c739c563977394265229ebe7225"
+ }
+}

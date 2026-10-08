@@ -1,0 +1,224 @@
+{
+ "measured": "2026-10-08",
+ "epoch": "4.0",
+ "clarityVersion": 6,
+ "budget": {
+  "runtime": 5000000000,
+  "readCount": 30000,
+  "readLength": 200000000,
+  "writeCount": 15000,
+  "writeLength": 15000000
+ },
+ "contracts": {
+  "pq-verifier-trait": {
+   "sourceBytes": 504,
+   "deploy": {
+    "writeLength": 0,
+    "writeCount": 0,
+    "readLength": 0,
+    "readCount": 0,
+    "runtime": 28
+   }
+  },
+  "wots": {
+   "sourceBytes": 3291,
+   "deploy": {
+    "writeLength": 0,
+    "writeCount": 0,
+    "readLength": 0,
+    "readCount": 0,
+    "runtime": 1942
+   }
+  },
+  "lamport": {
+   "sourceBytes": 2151,
+   "deploy": {
+    "writeLength": 0,
+    "writeCount": 0,
+    "readLength": 0,
+    "readCount": 0,
+    "runtime": 1368
+   }
+  },
+  "pq-vault": {
+   "sourceBytes": 5766,
+   "deploy": {
+    "writeLength": 344,
+    "writeCount": 1,
+    "readLength": 0,
+    "readCount": 0,
+    "runtime": 5880
+   }
+  }
+ },
+ "schemes": {
+  "wots": {
+   "samples": 300,
+   "signatureWords": 68,
+   "signatureBytes": 2176,
+   "signatureArgBytes": 2521,
+   "txBytes": 2841,
+   "open": {
+    "writeLength": 187,
+    "writeCount": 1,
+    "readLength": 5767,
+    "readCount": 4,
+    "runtime": 48767
+   },
+   "depositStx": {
+    "writeLength": 188,
+    "writeCount": 2,
+    "readLength": 5955,
+    "readCount": 6,
+    "runtime": 12807
+   },
+   "depositSbtc": {
+    "writeLength": 188,
+    "writeCount": 3,
+    "readLength": 6793,
+    "readCount": 10,
+    "runtime": 11313
+   },
+   "withdrawStx": {
+    "runtime": {
+     "min": 1100921,
+     "mean": 1224110,
+     "max": 1351889
+    },
+    "typical": {
+     "writeLength": 188,
+     "writeCount": 2,
+     "readLength": 9247,
+     "readCount": 9,
+     "runtime": 1226367
+    },
+    "verifierHashes": {
+     "min": 405,
+     "mean": 508,
+     "max": 615
+    }
+   },
+   "withdrawSbtc": {
+    "writeLength": 188,
+    "writeCount": 3,
+    "readLength": 10085,
+    "readCount": 13,
+    "runtime": 1170727
+   },
+   "replay": {
+    "writeLength": 0,
+    "writeCount": 0,
+    "readLength": 5954,
+    "readCount": 4,
+    "runtime": 41087
+   },
+   "tampered": {
+    "writeLength": 187,
+    "writeCount": 1,
+    "readLength": 9246,
+    "readCount": 8,
+    "runtime": 1166268
+   },
+   "verifyOnly": {
+    "leastWork": {
+     "hashes": 45,
+     "runtime": 609952
+    },
+    "mostWork": {
+     "hashes": 990,
+     "runtime": 1740714
+    }
+   },
+   "perTenure": 3333
+  },
+  "lamport": {
+   "samples": 30,
+   "signatureWords": 512,
+   "signatureBytes": 16384,
+   "signatureArgBytes": 18949,
+   "txBytes": 19272,
+   "open": {
+    "writeLength": 190,
+    "writeCount": 1,
+    "readLength": 5767,
+    "readCount": 4,
+    "runtime": 48767
+   },
+   "depositStx": {
+    "writeLength": 191,
+    "writeCount": 2,
+    "readLength": 5958,
+    "readCount": 6,
+    "runtime": 12808
+   },
+   "depositSbtc": {
+    "writeLength": 191,
+    "writeCount": 3,
+    "readLength": 6796,
+    "readCount": 10,
+    "runtime": 11314
+   },
+   "withdrawStx": {
+    "runtime": {
+     "min": 1059981,
+     "mean": 1059981,
+     "max": 1059981
+    },
+    "typical": {
+     "writeLength": 191,
+     "writeCount": 2,
+     "readLength": 8110,
+     "readCount": 9,
+     "runtime": 1059981
+    },
+    "verifierHashes": {
+     "min": 256,
+     "mean": 256,
+     "max": 256
+    }
+   },
+   "withdrawSbtc": {
+    "writeLength": 191,
+    "writeCount": 3,
+    "readLength": 8948,
+    "readCount": 13,
+    "runtime": 1058071
+   },
+   "replay": {
+    "writeLength": 0,
+    "writeCount": 0,
+    "readLength": 5957,
+    "readCount": 4,
+    "runtime": 136991
+   },
+   "tampered": {
+    "writeLength": 190,
+    "writeCount": 1,
+    "readLength": 8109,
+    "readCount": 8,
+    "runtime": 1053574
+   },
+   "verifyOnly": {
+    "runtime": 873108
+   },
+   "perTenure": 3333
+  }
+ },
+ "baseline": {
+  "ecdsaCheck": {
+   "writeLength": 0,
+   "writeCount": 0,
+   "readLength": 202,
+   "readCount": 3,
+   "runtime": 767
+  },
+  "stxTransferCall": {
+   "writeLength": 1,
+   "writeCount": 1,
+   "readLength": 203,
+   "readCount": 4,
+   "runtime": 5334
+  },
+  "stxTransferTxBytes": 180
+ }
+}

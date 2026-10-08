@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+.remember/
+# Working copies of the PRD. The document itself lives in Google Docs.
+docs/

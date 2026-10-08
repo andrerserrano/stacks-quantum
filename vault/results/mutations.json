@@ -1,0 +1,266 @@
+{
+ "measured": "2026-10-08",
+ "attacks": 21,
+ "rows": [
+  {
+   "contract": "pq-vault",
+   "mutation": "accept the verifier's answer whatever it is",
+   "caughtBy": [
+    "a signature is replayed on another deployment",
+    "a request with no valid signature is paid",
+    "the amount is raised",
+    "the recipient is changed",
+    "the next key is replaced, handing over the vault",
+    "an STX signature withdraws sBTC",
+    "a signature is used on another vault",
+    "a verifier takes the submitter's funds",
+    "a verifier uses the submitter's standing in another contract",
+    "a WOTS+ signature with extra words is accepted",
+    "a Lamport signature with extra words is accepted",
+    "a signature with a short word is accepted"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "run the verifier as the submitter",
+   "caughtBy": [
+    "a verifier takes the submitter's funds",
+    "a verifier uses the submitter's standing in another contract"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "write the vault's new state after the verifier runs",
+   "caughtBy": [
+    "a deposit made during a withdrawal is lost"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "accept any verifier contract",
+   "caughtBy": [
+    "a look-alike vault takes the id a depositor expects",
+    "a vault is emptied through a verifier it did not choose"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "skip the nonce check",
+   "caughtBy": [],
+   "survives": true,
+   "reason": "The nonce check is an early exit. The key has already changed, so a replay still fails on its key or its signature, at full cost.",
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "skip the balance check",
+   "caughtBy": [],
+   "survives": true,
+   "reason": "Clarity aborts the transaction when the debit underflows, so nothing is paid. The check turns that abort into a named error.",
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "allow a withdrawal of nothing",
+   "caughtBy": [],
+   "survives": true,
+   "reason": "A signed withdrawal of nothing only rotates the key. The transfer of zero then fails, so today nothing happens at all.",
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "allow the current key as the next key",
+   "caughtBy": [
+    "a one-time key is still in place after it signed"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "skip the next key's length check",
+   "caughtBy": [],
+   "survives": true,
+   "reason": "A short next key would lock the vault, which hurts only its owner. No verifier accepts a key that is not 32 bytes.",
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "keep the old key after a withdrawal",
+   "caughtBy": [
+    "a one-time key is still in place after it signed"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "keep the old nonce after a withdrawal",
+   "caughtBy": [
+    "the nonce does not advance",
+    "a vault is reset by opening it again"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "do not debit the vault",
+   "caughtBy": [
+    "a vault pays out the same balance twice",
+    "a vault is reset by opening it again",
+    "a deposit made during a withdrawal is lost"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "let a vault be opened twice",
+   "caughtBy": [
+    "a vault is reset by opening it again"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "number vaults instead of naming them by key and verifier",
+   "caughtBy": [
+    "a look-alike vault takes the id a depositor expects"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "leave the contract out of the digest",
+   "caughtBy": [
+    "a signature is replayed on another deployment"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "leave the chain out of the digest",
+   "caughtBy": [],
+   "survives": true,
+   "reason": "Simnet is one chain. A testnet signature replayed on mainnet cannot be tried here.",
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "leave the vault id out of the digest",
+   "caughtBy": [
+    "a signature is used on another vault"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "leave the nonce out of the digest",
+   "caughtBy": [],
+   "survives": true,
+   "reason": "Each withdrawal already signs under a new key. The nonce in the digest only matters if an owner reuses a key.",
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "leave the asset out of the digest",
+   "caughtBy": [
+    "an STX signature withdraws sBTC"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "leave the amount out of the digest",
+   "caughtBy": [
+    "the amount is raised"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "leave the recipient out of the digest",
+   "caughtBy": [
+    "the recipient is changed"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "pq-vault",
+   "mutation": "leave the next key out of the digest",
+   "caughtBy": [
+    "the next key is replaced, handing over the vault"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "wots",
+   "mutation": "accept extra words after the signature",
+   "caughtBy": [
+    "a WOTS+ signature with extra words is accepted"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "wots",
+   "mutation": "skip the word length check",
+   "caughtBy": [],
+   "survives": true,
+   "reason": "A short word changes the hash input, so the key no longer matches. The check keeps the encoding strict.",
+   "error": null
+  },
+  {
+   "contract": "lamport",
+   "mutation": "accept extra words after the signature",
+   "caughtBy": [
+    "a Lamport signature with extra words is accepted"
+   ],
+   "survives": false,
+   "reason": null,
+   "error": null
+  },
+  {
+   "contract": "lamport",
+   "mutation": "skip the word length check",
+   "caughtBy": [],
+   "survives": true,
+   "reason": "A short word changes the hash input, so the key no longer matches. The check keeps the encoding strict.",
+   "error": null
+  }
+ ]
+}

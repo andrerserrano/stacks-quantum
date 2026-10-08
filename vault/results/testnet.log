@@ -1,0 +1,33 @@
+20:50:23 made new testnet keys in /Users/andre/.config/pq-vault/testnet.json
+20:50:23 deployer STYYMGK95AP90AM43C2PXKXD1RM1HWH3Y8X02AFS
+20:50:23 asking the faucet for testnet STX
+20:50:34 balance 500 STX
+20:50:34 deploy pq-verifier-trait: sent 643 bytes, https://explorer.hiro.so/txid/0b76d082810aa618e879be7b922b3db18489937c000155e780f14bef826c767c?chain=testnet
+20:50:45   success, block 667658, result (ok true)
+20:50:45 deploy wots: sent 3,417 bytes, https://explorer.hiro.so/txid/babbeff24c8986dac1b4f87bf5969652f091444815f34c3ac1a018178f600d35?chain=testnet
+20:50:56   success, block 667661, result (ok true)
+20:50:56 deploy lamport: sent 2,280 bytes, https://explorer.hiro.so/txid/e4d2d54d2c341e7b2c49d2220bc7f76b2eafac3518adeac1c288731e8c220400?chain=testnet
+20:51:07   success, block 667663, result (ok true)
+20:51:07 deploy sbtc-token: sent 969 bytes, https://explorer.hiro.so/txid/0447a81ef2dc345beadb7bfb4ef404ccc80d62b468942ab38a4bb203858ee616?chain=testnet
+20:51:18   success, block 667666, result (ok true)
+20:51:18 deploy pq-vault: sent 5,896 bytes, https://explorer.hiro.so/txid/a6250e3711a77e39e3d4666004e1e8047140c3500ef64819c9d9a2f1f1282ae4?chain=testnet
+20:51:29   success, block 667667, result (ok true)
+20:51:29 open a vault: sent 219 bytes, https://explorer.hiro.so/txid/5bd5a4f1ead9fa823ade99bbb37782abf89cbc92f2e96be66c7cf6949de9232b?chain=testnet
+20:51:40   success, block 667670, result (ok 0x3fb94591fd63a6e503560279da332017bd685fe006e32de5a2f39afc3859ad57)
+20:51:40 vault 3fb94591fd63a6e503560279da332017bd685fe006e32de5a2f39afc3859ad57
+20:51:40 deposit 5 STX: sent 248 bytes, https://explorer.hiro.so/txid/2679f3789b9b93e5e095f0dd9bd4a4d8f0bca4e02288e727bffbad70a6795df6?chain=testnet
+20:51:51   success, block 667673, result (ok true)
+20:51:51 mint mock sBTC: sent 196 bytes, https://explorer.hiro.so/txid/e5d5ede1d67a1278e0d845cb5477b3954b07d8bb04cec10108463ca5ca04e8c8?chain=testnet
+20:52:01   success, block 667675, result (ok true)
+20:52:02 deposit mock sBTC: sent 286 bytes, https://explorer.hiro.so/txid/382543ffa4739d5500f58b9075e1e484e3a5c65ca2e0379c8de15e632436b670?chain=testnet
+20:52:12   success, block 667678, result (ok true)
+20:52:12 the contract and the wallet agree on the digest
+20:52:13 altered request, recipient changed: sent 2,882 bytes, https://explorer.hiro.so/txid/c8028440b3e9ec69d0c118c77be0a0b9009cedffaa01b76879e948206379546a?chain=testnet
+20:52:23   abort_by_response, block 667680, result (err u205)
+20:52:23 signed withdrawal of 1 STX: sent 2,882 bytes, https://explorer.hiro.so/txid/04d2a6979098c2ad488624d6be779f823e34426e9a535f282db9e88e5a7458b9?chain=testnet
+20:52:34   success, block 667683, result (ok true)
+20:52:34 replay of the paid request: sent 2,882 bytes, https://explorer.hiro.so/txid/d1ed0b0b8cf3c97fca6942fe55a11ed3a142291c0e9786303585524aeda4c9c2?chain=testnet
+20:52:45   abort_by_response, block 667686, result (err u203)
+20:52:45 altered: (err u205)   paid: (ok true)   replay: (err u203)
+20:52:45 withdrawal: 1,226,990 runtime, 0.025% of a tenure, 2,882 bytes
+20:52:45 vault now at nonce 1 with 4 STX. Results in results/testnet.json

@@ -1,0 +1,38 @@
+A vault guarded by WOTS+ hash-based signatures
+Simnet, Epoch 4.0, Clarity 6. The only cryptography in the signature check is SHA-256.
+
+1. Alice makes a one-time key on her device and opens a vault under its hash.
+     vault eb708a434a523b85... under key c0bf766efc7d37cf...
+     deposited 100 STX and 0.5 sBTC
+
+2. Mallory has Alice's Stacks account key. He sends withdrawals from her own account.
+     with no signature                                          REFUSED: the signature does not match
+     with a made-up signature                                   REFUSED: the signature does not match
+     signed with a one-time key of his own                      REFUSED: the signature does not match
+     The vault never looks at who sent the transaction. Her account key opens nothing.
+
+3. Alice signs a withdrawal of 25 STX to Bob with her one-time key.
+     signature: 68 words, 2,176 bytes
+   Mallory sees it in the mempool and tries to change it before it confirms.
+     recipient changed to Mallory                               REFUSED: the signature does not match
+     amount raised to 100 STX                                   REFUSED: the signature does not match
+     next key swapped for his own                               REFUSED: the signature does not match
+     asset changed, so 25 STX becomes 0.25 sBTC                 REFUSED: the signature does not match
+
+4. Anyone can submit the request as Alice signed it. Here Mallory does.
+     unchanged                                                  PAID
+     Bob received 25 STX. The vault holds 75 STX.
+     cost: 1,208,571 runtime, 0.024% of a tenure's budget
+     the vault is now under key 88ef0aa338e3dc46... and the old key is spent
+
+5. Mallory replays the request.
+     the same request again                                     REFUSED: the nonce was already used
+     the same request, claiming the new nonce and a new key     REFUSED: the signature does not match
+
+6. Alice withdraws sBTC with her next key.
+     0.1 sBTC to Bob                                            PAID
+     Bob received 0.1 sBTC. The vault holds 75 STX and 0.4 sBTC.
+
+What this shows: the vault pays only what its one-time key signed, once.
+What it does not show: the transaction that carries the signature, Stacks blocks
+and the Bitcoin behind sBTC are still secured by elliptic-curve signatures.
