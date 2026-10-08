@@ -4,8 +4,7 @@ Work on post-quantum security for Stacks and sBTC. Status as of 8 October 2026: 
 
 | What | Where |
 | --- | --- |
-| PRD, original | https://docs.google.com/document/d/1gDLMFcaVvd-T91cFN9qYM4vl3W83feWAF22VHPndSnI |
-| PRD, 8 October revision (draft) | https://docs.google.com/document/d/1HQD8YfwXA6BHlwwC8N16J6zSIFk9_Ar7ZOUEAUjvrrA |
+| PRD, revised 8 October 2026 | https://docs.google.com/document/d/1gDLMFcaVvd-T91cFN9qYM4vl3W83feWAF22VHPndSnI |
 | Tech spec | https://claude.ai/code/artifact/f2775991-0cff-4527-bb10-fc2258232029 |
 | The vault PoC | [vault/](vault/README.md) |
 | Measured cost | [vault/results/COSTS.md](vault/results/COSTS.md) |
@@ -19,4 +18,4 @@ To see it run:
 cd vault && npm install && npm run demo
 ```
 
-The PRD and its working copies live in Google Docs and are not in this repository.
+The PRD lives in Google Docs and is not in this repository.
