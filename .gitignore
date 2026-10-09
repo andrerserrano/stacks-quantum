@@ -3,3 +3,5 @@ node_modules/
 .remember/
 # Working copies of the PRD. The document itself lives in Google Docs.
 docs/
+# The hosted copy of the demo page, and its link to the Vercel project.
+site/.share/

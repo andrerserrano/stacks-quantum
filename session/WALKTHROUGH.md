@@ -1,6 +1,6 @@
 # Demo walkthrough
 
-A script for showing the pilot to product and engineering. About 15 minutes. The page runs locally: it is not deployed.
+A script for showing the pilot to product and engineering. About 15 minutes. Present from the page running locally, or from the hosted copy at https://pq-vault-demo-oo1b1vhoo-andre-serranos-projects.vercel.app while signed in to the Vercel account that owns it. Nobody else can open that copy.
 
 ## Before the meeting
 
