@@ -192,5 +192,5 @@ An automated adversarial review of the first build found five flaws, one of whic
 - Both schemes have run on testnet under separate accounts, once each, with a mock token and at a fixed fee on a quiet network.
 - The mock token lets anyone mint, so on a public testnet its balances mean nothing beyond the demo.
 - No review by a cryptographer. The WOTS+ construction follows the one inside SLH-DSA (FIPS 205) with an encoding of our own, so it matches no standard byte for byte.
-- No wallet and no relayer. A draft demo page is in `../site` and is not deployed.
+- No wallet and no relayer. A draft demo page is in `../site`, hosted behind sign-in and not public.
 - To point the vault at mainnet sBTC, change the two `.sbtc-token` references in `pq-vault.clar` to `'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token`.
