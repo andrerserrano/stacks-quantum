@@ -8,7 +8,7 @@
     "measure": "node measure.mjs",
     "mutate": "node mutate.mjs",
     "demo": "node demo.mjs",
-    "testnet:dry-run": "node testnet.mjs --dry-run"
+    "rehearse": "node testnet.mjs"
   },
   "devDependencies": {
     "@stacks/clarinet-sdk": "3.24.1",

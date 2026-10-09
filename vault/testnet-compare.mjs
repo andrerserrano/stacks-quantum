@@ -1,8 +1,11 @@
-// Replay the testnet run on simnet and compare what each charged.
+// Replay the first testnet run, of 8 October 2026, on simnet and compare what
+// each charged. That run came from an earlier version of testnet.mjs, in
+// which one key deployed, deposited and submitted.
 //
 // The contracts go under the same deployer address and the vault under the
-// same keys, so every digest and signature is the one testnet saw. Reads the
-// throwaway key file testnet.mjs made and results/testnet.json.
+// same keys, so every digest and signature is the one testnet saw. Reads that
+// run's throwaway key file, ~/.config/pq-vault/testnet.json, and
+// results/testnet.json.
 //
 // Run: node testnet-compare.mjs
 // Writes results/TESTNET.md.
@@ -53,7 +56,7 @@ const w = rows.find((r) => r.name === "withdraw");
 
 const md = `# The testnet run
 
-\`testnet.mjs\` ran on ${run.txs.withdraw ? new Date().toISOString().slice(0, 10) : ""} against Stacks testnet at Epoch 4.0. It deployed the five contracts at Clarity 6, opened a WOTS+ vault, funded it, and sent three withdrawals. \`testnet-compare.mjs\` then replayed the same requests on simnet, under the same deployer address and keys, to compare cost.
+\`testnet.mjs\` ran on 2026-10-08 against Stacks testnet at Epoch 4.0. It deployed the five contracts at Clarity 6, opened a WOTS+ vault, funded it, and sent three withdrawals. \`testnet-compare.mjs\` then replayed the same requests on simnet, under the same deployer address and keys, to compare cost.
 
 Deployer: \`${deployer}\`, a throwaway key made for this run. Vault: \`${run.vaultId}\`.
 
