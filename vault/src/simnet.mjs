@@ -21,7 +21,8 @@ export const source = (name) => readFileSync(new URL(`${name}.clar`, root), "utf
 
 // `override` replaces a contract's source by name, for the mutation check.
 // `deployer` puts the contracts under another address, to mirror a testnet run.
-export async function boot({ extra = [], override = {}, deployer = DEPLOYER } = {}) {
+// `contracts` names the ones to deploy. An empty list gives a bare chain.
+export async function boot({ extra = [], override = {}, deployer = DEPLOYER, contracts = CONTRACTS } = {}) {
   const simnet = await getSDK({ trackCosts: true, trackCoverage: false });
   await simnet.initEmptySession({ enabled: false, api_url: "", initial_height: 1, use_mainnet_wallets: false });
   simnet.setEpoch(EPOCH);
@@ -33,7 +34,7 @@ export async function boot({ extra = [], override = {}, deployer = DEPLOYER } = 
   const deploy = (name, src = source(name)) => {
     deployCosts[name] = simnet.deployContract(name, src, { clarityVersion: CLARITY_VERSION }, deployer).costs.total;
   };
-  CONTRACTS.forEach((name) => deploy(name, override[name] ?? source(name)));
+  contracts.forEach((name) => deploy(name, override[name] ?? source(name)));
   extra.forEach(([name, src]) => deploy(name, src));
 
   const id = (name) => `${deployer}.${name}`;

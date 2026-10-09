@@ -10,6 +10,10 @@
 // Lamport: a secret is revealed for every bit position where two of the
 // signed digests differ. The forger has to match the remaining positions.
 //
+// The signed digests here are random: requests the forger had no say in, and
+// a classical search. If the forger can choose part of what is signed second,
+// WOTS+ falls to about 2^24. See forge-chosen.mjs.
+//
 // Run: node analysis/double-sign.mjs
 
 import { randomBytes } from "node:crypto";

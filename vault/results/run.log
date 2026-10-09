@@ -1,0 +1,73 @@
+19:26:19 made new testnet keys in /Users/andre/.config/pq-vault/demo.json
+19:26:19 rehearsed on simnet under the testnet keys. Deployer ST2MRQ993WBQQ82GVY7YQQMMH1GYKSG885Z79ZKFS
+19:26:19 asking the faucet for testnet STX
+19:26:30 deployer balance 500 STX
+19:26:31 deploy-pq-verifier-trait: sent 643 bytes, https://explorer.hiro.so/txid/0xb5d1135fd18d99f4b1c58cc67134d8205e58bfff9e1abc97f2d231c6a383c328?chain=testnet
+19:26:34   success, block 677015, result (ok true)
+19:26:34 deploy-wots: sent 3,417 bytes, https://explorer.hiro.so/txid/0x54e74c6f834c5d598858055dd067d411e232f6c279e6e575c90e9c3eec949c17?chain=testnet
+19:26:37   success, block 677016, result (ok true)
+19:26:38 deploy-lamport: sent 2,280 bytes, https://explorer.hiro.so/txid/0xeecd3f896805aa40e6a0364ebed9d6399b21c5011f763ce9956a349cc4a6cbc7?chain=testnet
+19:26:41   success, block 677018, result (ok true)
+19:26:41 deploy-sbtc-token: sent 969 bytes, https://explorer.hiro.so/txid/0x62706fa5b4f46134c66a24f1c05cfad6cd25782f2175b95ac8deed8638783e86?chain=testnet
+19:26:44   success, block 677019, result (ok true)
+19:26:45 deploy-pq-vault: sent 5,896 bytes, https://explorer.hiro.so/txid/0x64537677ca6f9f17d3aac5ad5c8805529deb346b71b6dee9a55da1d60118d7ee?chain=testnet
+19:26:55   success, block 677020, result (ok true)
+19:26:55 fund-owner: sent 180 bytes, https://explorer.hiro.so/txid/0xf35e9d94f70550c2f59deb6711cebc12b599ab6a99de9eb357bc62e96f8c8767?chain=testnet
+19:27:04   success, block 677021, result (ok true)
+19:27:05 fund-submitter: sent 180 bytes, https://explorer.hiro.so/txid/0xe45ca972a3d3bc52b0bee5fe615e694c4ee2d8035d875b41ac36bc16f24145f5?chain=testnet
+19:27:20   success, block 677023, result (ok true)
+19:27:20 mint-sbtc: sent 196 bytes, https://explorer.hiro.so/txid/0x90e673000c5c1deb139d45bd285f5a5d7977fd847fb3d5381445e5e97ddeb4f7?chain=testnet
+19:27:23   success, block 677024, result (ok true)
+19:27:24 open: sent 219 bytes, https://explorer.hiro.so/txid/0x539242a65171183185e4592afdf244cfc68c49fffefb15d739bb8cdadf85d87d?chain=testnet
+19:27:27   success, block 677025, result (ok 0x8da32012bd0a69b787cd8f5a6d198c99225577e9f7f9ac28a12063188b086a3d)
+19:27:27 deposit-stx: sent 248 bytes, https://explorer.hiro.so/txid/0x93c71060b438e07a2207aabf3e4a4c30b960dadc93eea7ebc08b290bc77cd5fe?chain=testnet
+19:27:31   success, block 677026, result (ok true)
+19:27:31 deposit-sbtc: sent 286 bytes, https://explorer.hiro.so/txid/0xd3ca3e7812c3bcb433028f967ab2eaa77d4ac56c9a94c1372e9e415f989a4d67?chain=testnet
+19:27:34   success, block 677028, result (ok true)
+19:27:34 no-signature: sent 366 bytes, https://explorer.hiro.so/txid/0xb2ec082b97c0cd5bae05bac821ac01d3e7335bb5eedd3768d87ef50e7fdf2c48?chain=testnet
+19:27:37   abort_by_response, block 677029, result (err u205)
+19:27:38 own-key: sent 2,882 bytes, https://explorer.hiro.so/txid/0xe63eecb6595317e146a27ae83dac034e5d6f4507bb4076c5a5af635a0ef2a2fa?chain=testnet
+19:27:41   abort_by_response, block 677030, result (err u205)
+19:27:41 altered-recipient: sent 2,882 bytes, https://explorer.hiro.so/txid/0xe0d10de68174667b32741d17cf514f173944a7663833d79fc5784a1cb7ef4d31?chain=testnet
+19:27:45   abort_by_response, block 677032, result (err u205)
+19:27:45 altered-amount: sent 2,882 bytes, https://explorer.hiro.so/txid/0x92e288def9ed21589407398d8a0dbf1d988008b2d82bd83b5e7e4a8c819d06cb?chain=testnet
+19:27:48   abort_by_response, block 677033, result (err u205)
+19:27:48 altered-next-key: sent 2,882 bytes, https://explorer.hiro.so/txid/0xc8b36889a35b04dc14952e8081e4013298c26bc1f352f017f18621de6f02f98c?chain=testnet
+19:27:51   abort_by_response, block 677035, result (err u205)
+19:27:54 withdraw: sent 2,882 bytes, https://explorer.hiro.so/txid/0x817edc8eb04687124a3bd9c75430eaad7c741e0ded64947fcefef41e6ff21acd?chain=testnet
+19:28:06   success, block 677037, result (ok true)
+19:28:06 replay: sent 2,882 bytes, https://explorer.hiro.so/txid/0x0cb16321b1345e3001c18079a74b2d9b81bec1103cd53a365ab5a8284ce23b1f?chain=testnet
+19:28:09   abort_by_response, block 677039, result (err u203)
+19:28:10 withdraw-sbtc: sent 2,920 bytes, https://explorer.hiro.so/txid/0xbffe298de323c10f475510bcf7bb2eab6f38a99b7529356c904368b2a8da0587?chain=testnet
+19:28:13   success, block 677040, result (ok true)
+19:28:13 open-lamport: sent 222 bytes, https://explorer.hiro.so/txid/0x0063c3735fed15ed199a6af2835a41eabafaaf948dfb7b91a7410dbd81936b3d?chain=testnet
+19:28:19   success, block 677041, result (ok 0x0e26261d6e01cc813471af825043c92c81958c601d1d6df0cb51817f628babd2)
+19:28:20 deposit-stx-lamport: sent 248 bytes, https://explorer.hiro.so/txid/0x3e4743dbf82f17484707d427180fc71940fa709733733dbd25bd6fe3dda30cc2?chain=testnet
+19:28:27   success, block 677042, result (ok true)
+19:28:37 withdraw-lamport: sent 19,313 bytes, https://explorer.hiro.so/txid/0x7234c2dc24074861dc63b48e2262cf8f028282d8d8646e4a2fe35b7988364b5c?chain=testnet
+19:28:44   success, block 677043, result (ok true)
+  deploy-pq-verifier-trait   deployer       643 bytes  (ok true)
+  deploy-wots                deployer     3,417 bytes  (ok true)
+  deploy-lamport             deployer     2,280 bytes  (ok true)
+  deploy-sbtc-token          deployer       969 bytes  (ok true)
+  deploy-pq-vault            deployer     5,896 bytes  (ok true)
+  fund-owner                 deployer       180 bytes  (ok true)
+  fund-submitter             deployer       180 bytes  (ok true)
+  mint-sbtc                  deployer       196 bytes  (ok true)
+  open                       owner          219 bytes  (ok 0x8da32012bd0a69b787cd8f5a6d198c99225577e9f7f9ac28a12063188b086a3d)
+  deposit-stx                owner          248 bytes  (ok true)
+  deposit-sbtc               owner          286 bytes  (ok true)
+  no-signature               owner          366 bytes  (err u205)
+  own-key                    owner        2,882 bytes  (err u205)
+  altered-recipient          submitter    2,882 bytes  (err u205)
+  altered-amount             submitter    2,882 bytes  (err u205)
+  altered-next-key           submitter    2,882 bytes  (err u205)
+  withdraw                   submitter    2,882 bytes  (ok true)
+  replay                     submitter    2,882 bytes  (err u203)
+  withdraw-sbtc              submitter    2,920 bytes  (ok true)
+  open-lamport               owner          222 bytes  (ok 0x0e26261d6e01cc813471af825043c92c81958c601d1d6df0cb51817f628babd2)
+  deposit-stx-lamport        owner          248 bytes  (ok true)
+  withdraw-lamport           submitter   19,313 bytes  (ok true)
+19:28:46 WOTS+ withdrawal: 1,209,004 runtime, 0.024% of a tenure, 2,882 bytes
+19:28:46 Lamport withdrawal: 1,060,098 runtime, 19,313 bytes
+19:28:46 the WOTS+ vault is at nonce 2 with 4 STX. Written to results/run.json

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>A hash-based vault on Stacks | Stacks Labs</title>
+  <meta name="description" content="A proof of concept on Stacks testnet: a vault whose withdrawals need a hash-based signature.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the content</a>
+
+  <header class="top">
+    <a class="logo" href="https://www.stackslabs.com" aria-label="Stacks Labs">
+      <svg viewBox="0 0 133.309 18" role="img" aria-hidden="true"><path d="M 21.338 11.312 L 23.641 10.6 C 23.9 12.537 25.384 13.808 27.193 13.808 C 28.98 13.808 30.141 12.969 30.141 11.677 C 30.141 8.104 21.898 10.063 21.898 4.639 C 21.898 2.25 24.114 0.593 27.064 0.593 C 29.883 0.593 32.1 2.098 32.53 4.359 L 30.271 5.284 C 29.969 3.757 28.786 2.788 27.064 2.788 C 25.428 2.788 24.438 3.476 24.438 4.639 C 24.438 7.673 32.703 5.563 32.703 11.633 C 32.703 14.26 30.486 16.004 27.108 16.004 C 24.18 16.004 21.77 14.065 21.338 11.31 Z M 38.557 16.004 C 36.512 16.004 34.984 14.885 34.984 12.409 L 34.984 6.985 L 33.09 6.985 L 33.09 4.984 L 34.984 4.984 L 34.984 1.754 L 37.331 1.754 L 37.331 4.984 L 40.129 4.984 L 40.129 6.985 L 37.331 6.985 L 37.331 12.279 C 37.331 13.357 37.933 13.915 38.815 13.915 C 39.224 13.915 39.72 13.851 40.129 13.658 L 40.279 15.744 C 39.722 15.921 39.141 16.008 38.557 16.004 Z M 51.6 15.832 L 49.253 15.832 L 49.253 14.453 C 48.738 15.356 47.424 16.002 45.981 16.002 C 42.668 16.002 40.795 13.678 40.795 10.407 C 40.795 7.135 42.668 4.811 45.94 4.811 C 47.339 4.811 48.608 5.434 49.254 6.337 L 49.254 4.984 L 51.6 4.984 L 51.6 15.831 Z M 46.284 13.959 C 48.178 13.959 49.426 12.539 49.426 10.407 C 49.426 8.254 48.178 6.855 46.285 6.855 C 44.389 6.855 43.142 8.254 43.142 10.407 C 43.142 12.539 44.389 13.959 46.284 13.959 Z M 53.15 10.407 C 53.15 7.071 55.345 4.812 58.595 4.812 C 61.264 4.812 63.179 6.232 63.545 8.47 L 61.264 8.922 C 61.048 7.695 60.037 6.855 58.66 6.855 C 56.787 6.855 55.581 8.254 55.581 10.407 C 55.581 12.56 56.808 13.959 58.66 13.959 C 60.037 13.959 61.006 13.205 61.264 11.935 L 63.566 12.388 C 63.116 14.647 61.243 16.004 58.595 16.004 C 55.345 16.004 53.15 13.743 53.15 10.408 Z M 65.052 15.831 L 65.052 0.593 L 67.419 0.593 L 67.419 9.071 L 71.897 4.981 L 74.931 4.981 L 70.433 9.266 L 75.275 15.829 L 72.413 15.829 L 68.775 10.836 L 67.419 12.106 L 67.419 15.829 L 65.052 15.829 Z"/><path d="M 75.325 13.078 L 77.263 12.26 C 77.628 13.423 78.468 14.391 79.974 14.391 C 81.093 14.391 81.847 13.745 81.847 12.971 C 81.847 10.624 75.799 12.153 75.799 8.042 C 75.799 6.342 77.284 5.073 79.63 5.073 C 81.675 5.073 83.397 6.148 83.87 7.74 L 81.933 8.558 C 81.653 7.483 80.642 6.88 79.652 6.88 C 78.619 6.88 77.973 7.289 77.973 7.999 C 77.973 10.086 84.064 8.494 84.064 12.95 C 84.064 14.823 82.428 16.264 79.974 16.264 C 77.327 16.264 75.82 14.629 75.325 13.079 Z M 90.155 1.025 L 92.673 1.025 L 92.673 13.876 L 99.861 13.876 L 99.861 16.093 L 90.155 16.093 L 90.155 1.024 Z M 111.097 16.093 L 108.75 16.093 L 108.75 14.714 C 108.234 15.617 106.921 16.263 105.478 16.263 C 102.165 16.263 100.292 13.939 100.292 10.668 C 100.292 7.396 102.165 5.071 105.437 5.071 C 106.835 5.071 108.104 5.695 108.75 6.598 L 108.75 5.244 L 111.097 5.244 L 111.097 16.091 Z M 105.78 14.22 C 107.675 14.22 108.922 12.799 108.922 10.668 C 108.922 8.515 107.675 7.116 105.78 7.116 C 103.886 7.116 102.639 8.515 102.639 10.668 C 102.639 12.799 103.886 14.22 105.78 14.22 Z M 115.595 14.714 L 115.595 16.091 L 113.249 16.091 L 113.249 0.854 L 115.596 0.854 L 115.596 6.601 C 116.241 5.696 117.51 5.071 118.909 5.071 C 122.181 5.071 124.054 7.396 124.054 10.668 C 124.054 13.94 122.181 16.263 118.867 16.263 C 117.425 16.263 116.112 15.618 115.595 14.714 Z M 118.565 14.22 C 120.46 14.22 121.708 12.799 121.708 10.668 C 121.708 8.515 120.46 7.116 118.565 7.116 C 116.671 7.116 115.424 8.515 115.424 10.668 C 115.424 12.799 116.671 14.22 118.565 14.22 Z M 124.57 13.078 L 126.508 12.26 C 126.873 13.423 127.712 14.391 129.219 14.391 C 130.338 14.391 131.092 13.745 131.092 12.971 C 131.092 10.624 125.044 12.153 125.044 8.042 C 125.044 6.342 126.529 5.073 128.875 5.073 C 130.919 5.073 132.642 6.148 133.115 7.74 L 131.178 8.558 C 130.898 7.483 129.887 6.88 128.897 6.88 C 127.863 6.88 127.218 7.289 127.218 7.999 C 127.218 10.086 133.309 8.494 133.309 12.95 C 133.309 14.823 131.673 16.264 129.219 16.264 C 126.572 16.264 125.065 14.629 124.57 13.079 Z M 14.5 10.1 L 0.605 10.091 C 0.271 10.091 0 10.361 0 10.695 L 0 11.685 C 0 12.019 0.271 12.29 0.605 12.29 L 11.754 12.29 C 11.809 12.29 11.85 12.316 11.882 12.373 C 11.905 12.416 11.901 12.469 11.87 12.508 L 8.808 17.06 C 8.691 17.242 8.679 17.472 8.778 17.664 C 8.878 17.872 9.089 18.003 9.319 18 L 10.509 18 C 10.718 18 10.913 17.893 11.015 17.727 L 15.002 11.75 L 15.1 11.456 L 15.109 10.709 C 15.109 10.373 14.837 10.101 14.5 10.1 Z M 15.028 6.303 L 11.02 0.279 C 10.909 0.104 10.716 -0.001 10.509 0 L 9.319 0 C 9.093 -0.003 8.885 0.124 8.784 0.326 C 8.681 0.523 8.692 0.761 8.813 0.947 L 11.875 5.499 C 11.902 5.539 11.903 5.591 11.878 5.632 C 11.856 5.68 11.807 5.711 11.754 5.709 L 0.605 5.709 C 0.271 5.709 0 5.98 0 6.314 L 0 7.305 C 0 7.638 0.273 7.909 0.605 7.909 L 14.502 7.9 C 14.837 7.9 15.11 7.627 15.11 7.292 L 15.11 6.602 L 15.027 6.303 Z"/></svg>
+    </a>
+    <p class="status"><span class="dot" aria-hidden="true"></span>Testnet proof of concept. Unaudited.</p>
+  </header>
+
+  <main id="main">
+    <div id="notice" class="notice" hidden></div>
+
+    <!-- 1. The claim and its limits -->
+    <section class="hero">
+      <p class="eyebrow">Quantum pilot</p>
+      <h1>A vault on Stacks that only a <em>hash-based</em> signature can open</h1>
+      <p class="lead">Funds in this vault move only when the owner signs with a one-time key built from SHA-256. That check uses no elliptic curves and no lattices. It runs as an ordinary Clarity contract, so it needed no change to Stacks.</p>
+      <dl class="facts">
+        <div><dt>No fork</dt><dd>Deployed as a contract on Stacks as it is today</dd></div>
+        <div><dt id="fact-size">2.9 KB</dt><dd>per WOTS+ withdrawal, about <span id="fact-times">16</span> times a plain transfer</dd></div>
+        <div><dt id="fact-share">0.03%</dt><dd>of what one Stacks tenure can process, on its tightest limit</dd></div>
+      </dl>
+      <div class="claims">
+        <div>
+          <h2>What this shows</h2>
+          <ul class="ticks">
+            <li>The vault pays only what its hash-based key signed, and only once.</li>
+            <li>An attacker who holds the owner's Stacks account key cannot move the funds.</li>
+            <li>It took no consensus change and no new Clarity function.</li>
+          </ul>
+        </div>
+        <div>
+          <h2>What it does not</h2>
+          <ul class="crosses">
+            <li>The transaction that carries a withdrawal is still signed with today's elliptic-curve keys.</li>
+            <li>Stacks blocks and signers still rely on those keys.</li>
+            <li>The Bitcoin backing sBTC sits behind a Taproot key. A vault does nothing for it, and the sBTC here is a test token.</li>
+            <li>No cryptographer has reviewed this. It holds test funds only.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. How it works -->
+    <section id="how">
+      <p class="eyebrow">How it works</p>
+      <h2>One signature, checked by a contract</h2>
+      <ol class="flow">
+        <li>
+          <span class="who">The owner</span>
+          <strong>Signs a request</strong>
+          <p>On their own device, with a one-time key. The request names the amount, the recipient and the vault's next key.</p>
+        </li>
+        <li>
+          <span class="who">Any account</span>
+          <strong>Submits it</strong>
+          <p>Any Stacks account can carry the request to the chain and pay the fee. It has no say over the funds.</p>
+        </li>
+        <li>
+          <span class="who">The vault contract</span>
+          <strong>Checks the signature</strong>
+          <p>It asks a verifier contract whether the signature matches the key it holds. The verifier runs SHA-256 and nothing else.</p>
+        </li>
+        <li>
+          <span class="who">The recipient</span>
+          <strong>Is paid</strong>
+          <p>The vault pays who the owner signed for and switches to the next key. The old key is never used again.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- 3. The run -->
+    <section id="run">
+      <p class="eyebrow" id="run-eyebrow">The run</p>
+      <h2 id="run-title">The run</h2>
+      <p class="intro" id="run-intro">Everything below happened on Stacks testnet. Start with where the money ended up, then follow each transaction.</p>
+
+      <h3 class="sub">Where the money is</h3>
+      <div id="accounts" class="accounts"></div>
+
+      <h3 class="sub">Every transaction, in order</h3>
+      <p class="key"><span class="transfer moved"><span class="arrow"></span></span> moved <span class="transfer stopped"><span class="arrow"></span></span> asked for, and refused</p>
+      <div id="timeline" class="timeline"><p class="loading">Loading the run.</p></div>
+
+      <details class="accounts-used">
+        <summary>The four accounts in this run</summary>
+        <p>Three of them sent the transactions and one only received. None can move a vault's funds. The vaults' own keys are hash-based and belong to no account.</p>
+        <ul class="roles" id="roles"></ul>
+      </details>
+    </section>
+
+    <!-- 4. Try to forge it -->
+    <section id="forge">
+      <p class="eyebrow">Try it</p>
+      <h2>Change what the owner signed</h2>
+      <p class="intro">This is the owner's signed request from the run above. Change it and ask the contract. The check runs on the live contract and sends no transaction.</p>
+      <div class="forge" id="forge-panel"><p class="loading">Loading the signed request.</p></div>
+    </section>
+
+    <!-- 5. Size and cost -->
+    <section id="cost">
+      <p class="eyebrow">Size and cost</p>
+      <h2>What a hash-based signature costs</h2>
+      <p class="intro">The signature is larger than today's and takes more compute to check. Both stay small against what a tenure allows. A tenure is the run of Stacks blocks between two Bitcoin blocks.</p>
+      <div id="bars" class="bars"></div>
+      <div class="why">
+        <h3>Why WOTS+ and not Lamport</h3>
+        <p>Both are one-time signatures that rest on SHA-256 alone. The vault can use either, and the run above uses both.</p>
+        <ul>
+          <li><strong>Size.</strong> A WOTS+ signature is 7.5 times smaller for about the same compute. On a blockchain, size is the cost that matters.</li>
+          <li><strong>Where it leads.</strong> The schemes that let one key sign many times, XMSS and SLH-DSA, are built from WOTS+. The signature proposed for Ethereum's validators is from the same family.</li>
+          <li><strong>What Lamport does better.</strong> It is simpler to explain, and more forgiving if a key is used twice by mistake.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6. The path -->
+    <section id="path">
+      <p class="eyebrow">The path</p>
+      <h2>From one vault to a quantum-resistant Stacks</h2>
+      <p class="intro">A vault protects one layer. These are the others, in the order we would take them.</p>
+      <ol class="path">
+        <li>
+          <span class="stage done">Shown here</span>
+          <div><strong>Assets held in contracts</strong><p>Funds in a vault move only on a hash-based signature. Other contracts can use the same verifier.</p></div>
+        </li>
+        <li>
+          <span class="stage next">Next</span>
+          <div><strong>Accounts</strong><p>Keys that sign many times, built on the same check, and an account flow that makes them usable day to day.</p></div>
+        </li>
+        <li>
+          <span class="stage later">Research</span>
+          <div><strong>Signers and blocks</strong><p>A hash-based signature alongside the keys that approve Stacks blocks and sBTC withdrawals today.</p></div>
+        </li>
+        <li>
+          <span class="stage later">Research</span>
+          <div><strong>The Bitcoin backing sBTC</strong><p>The reserve is spent under Bitcoin's rules, so protecting it needs a design on Bitcoin. That work is separate.</p></div>
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>Stacks Labs. A proof of concept on Stacks testnet. Not audited. Do not use it with real funds.</p>
+    <p id="source" class="source"></p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

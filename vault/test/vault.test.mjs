@@ -352,7 +352,7 @@ describe("vault", () => {
     const v = { ...alice, contract: "pq-vault" };
     fund(v, { stx: 5_000_000 });
     // Mallory opened it, and it is still Alice's.
-    const empty = { ...request(v, { nonce: 0, amount: 5_000_000, recipient: MALLORY }), sig: [] };
+    const empty = { ...v.withdrawal({ nonce: 0, asset: "stx", amount: 5_000_000, recipient: MALLORY }), sig: [] };
     assert.equal(show(submit(v, empty, { verifier: "yes" })), ERR.verifier);
     assert.equal(show(submit(v, request(v, { nonce: 0, amount: 5_000_000 }))), OK);
   });
@@ -361,7 +361,9 @@ describe("vault", () => {
     const small = openVault("wots", { stx: 1_000_000, sbtc: 1000 });
     const large = openVault("wots", { stx: 9_000_000, sbtc: 900_000 });
     assert.equal(show(submit(small, request(small, { nonce: 0, amount: 1_000_001 }))), ERR.balance);
-    assert.equal(show(submit(small, request(small, { nonce: 0, asset: "sbtc", amount: 1001 }))), ERR.balance);
+    // Key 0 has signed once, and the wallet will not sign with it again.
+    const sbtc = signRaw(small, { nonce: 0, asset: "sbtc", amount: 1001, recipient: BOB, nextKey: small.key(1) });
+    assert.equal(show(submit(small, sbtc)), ERR.balance);
     assert.deepEqual(state(large), { key: large.key(0).toString("hex"), nonce: 0, stx: 9_000_000, sbtc: 900_000 });
   });
 });

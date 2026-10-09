@@ -1,241 +1,348 @@
-// The vault on Stacks testnet: deploy, open a WOTS+ vault, fund it, show an
-// altered request refused, a signed withdrawal paid and its replay refused.
-// Every step checks the chain or the state file first, so the script can be
-// stopped and run again.
+// The demo on Stacks testnet: the scripted run, and withdrawals made live.
 //
-// Run: node testnet.mjs            sends transactions to testnet
-//      node testnet.mjs --dry-run  builds every transaction and prints its
-//                                  size, with keys held in memory. Sends nothing.
+//   node testnet.mjs                  rehearse the scripted run on a simnet and
+//                                     build every testnet transaction. Sends nothing.
+//   node testnet.mjs --send           send the scripted run to testnet
+//   node testnet.mjs status           the vaults and accounts as testnet has them
+//   node testnet.mjs report           write results/RUN.md: the run beside the
+//                                     same steps on simnet, and a check that the
+//                                     deployed source is the source in contracts/
+//   node testnet.mjs withdraw 1 stx   check a new withdrawal against the chain
+//       [--scheme lamport] [--to ADDRESS]
+//   node testnet.mjs withdraw 1 stx --send     sign it and send it
 //
-// The live path has not been run. It follows the script that put the shielded
-// sBTC benchmark on testnet, and only the dry run has been exercised here.
+// Nothing is signed with a vault key and nothing is sent without --send.
 //
-// The signing key and the vault's master secret are throwaways made for this
-// test. They live outside the repository, in ~/.config/pq-vault/testnet.json,
-// readable only by their owner. They hold faucet STX and a mock token.
+// The scripted run (src/story.mjs) deploys the contracts under a fresh key,
+// opens a WOTS+ vault and a Lamport vault, shows forged and altered requests
+// refused, and pays three signed withdrawals. Separate accounts deploy, own,
+// submit and receive. Stopped and run again, it picks up where it stopped.
+//
+// The run is written to results/run.json, which the demo page reads. The
+// rehearsal writes the same document to results/run.rehearsal.json.
 
-import { randomBytes } from "node:crypto";
-import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { homedir } from "node:os";
-import { dirname, join } from "node:path";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { Cl } from "@stacks/transactions";
+import { CONTRACTS, TENURE_BUDGET, source } from "./src/simnet.mjs";
+import { fileJournal } from "./src/journal.mjs";
+import { assemble, play, published, signChecked, story, vaultState, withdrawCall } from "./src/story.mjs";
 import {
-  Cl, ClarityVersion, Pc, PostConditionMode, broadcastTransaction, cvToJSON, fetchCallReadOnlyFunction,
-  fetchNonce, getAddressFromPrivateKey, makeContractCall, makeContractDeploy, randomPrivateKey,
-} from "@stacks/transactions";
-import { CONTRACTS, CHAIN_ID, TENURE_BUDGET, source } from "./src/simnet.mjs";
-import { sigCV, wallet } from "./src/vault.mjs";
+  API, JOURNAL, KEY_FILE, ROLES, addresses, amountText, explorer, faucet, get, loadKeys, netDriver, rehearsalKeys, rehearse, stxBalance, units, wallets,
+} from "./src/testnet.mjs";
 
-const DRY = process.argv.includes("--dry-run");
-const API = "https://api.testnet.hiro.so";
-const EXPLORER = (txid) => `https://explorer.hiro.so/txid/${txid}?chain=testnet`;
-const KEY_FILE = join(homedir(), ".config", "pq-vault", "testnet.json");
-const STATE_FILE = "results/testnet.json";
-const SCHEME = "wots";
-const DEPOSIT = 5_000_000n; // 5 STX
-const SBTC = 1_000_000n; // 0.01 mock sBTC
-const AMOUNT = 1_000_000n; // 1 STX withdrawn
-const FEES = { deploy: 150_000n, call: 30_000n };
+// The results sit beside this script, wherever it is run from. A run that
+// could not find its own record would send its first steps a second time.
+// The tests point this at a directory of their own.
+const RESULTS = process.env.PQ_VAULT_RESULTS ?? fileURLToPath(new URL("./results/", import.meta.url));
+const RUN_FILE = join(RESULTS, "run.json");
+const REHEARSAL_FILE = join(RESULTS, "run.rehearsal.json");
+const REPORT_FILE = join(RESULTS, "RUN.md");
+const RECORDED = ["txid", "nonce", "status", "result", "bytes", "fee", "block", "time", "cost", "found"];
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// The command line, read strictly. A mistyped option must stop the command,
+// not turn into a different request under a one-time key.
+const COMMANDS = { run: { words: 0, options: [] }, status: { words: 0, options: [] }, report: { words: 0, options: [] },
+                   withdraw: { words: 2, options: ["scheme", "to"] } };
+function parse(argv) {
+  const words = [], options = {};
+  let send = false;
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--send") send = true;
+    else if (a === "--scheme" || a === "--to") {
+      if (argv[i + 1] === undefined || argv[i + 1].startsWith("-")) throw new Error(`${a} needs a value`);
+      if (a.slice(2) in options) throw new Error(`${a} is given twice`);
+      options[a.slice(2)] = argv[++i];
+    } else if (a.startsWith("-")) throw new Error(`unknown option ${a}. The options are --send, --scheme and --to`);
+    else words.push(a);
+  }
+  const command = words[0] in COMMANDS ? words.shift() : "run";
+  const takes = COMMANDS[command];
+  if (words.length > takes.words) throw new Error(`"${words[takes.words]}" is not something ${command === "run" ? "this script" : command} understands: use status, withdraw or report, or nothing for the scripted run`);
+  for (const name of Object.keys(options)) if (!takes.options.includes(name)) throw new Error(`--${name} does not apply to ${command === "run" ? "the scripted run" : command}`);
+  if (send && takes.words === 0 && command !== "run") throw new Error(`--send does not apply to ${command}`);
+  return { command, rest: words, options, send };
+}
+
+let command, rest, options, SEND;
+const option = (name) => options[name];
+
 const log = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
+const fmt = (n) => Number(n).toLocaleString("en-US");
+const write = (file, doc) => { mkdirSync(RESULTS, { recursive: true }); writeFileSync(file, JSON.stringify(doc, null, 1) + "\n"); };
+const shown = (file) => `results/${file.slice(RESULTS.length).replace(/^\//, "")}`;
 
-// --- keys ---------------------------------------------------------------------
-
-function loadKeys() {
-  let keys;
-  if (DRY) {
-    keys = { deployer: randomPrivateKey(), recipient: randomPrivateKey(), master: randomBytes(32).toString("hex") };
-  } else {
-    if (!existsSync(KEY_FILE)) {
-      mkdirSync(dirname(KEY_FILE), { recursive: true, mode: 0o700 });
-      const fresh = {
-        note: "Throwaway keys for the pq-vault testnet demo. Testnet only. Never fund these on mainnet.",
-        created: new Date().toISOString(),
-        deployer: randomPrivateKey(), recipient: randomPrivateKey(), master: randomBytes(32).toString("hex"),
-      };
-      writeFileSync(KEY_FILE, JSON.stringify(fresh, null, 1) + "\n", { mode: 0o600 });
-      chmodSync(KEY_FILE, 0o600);
-      log(`made new testnet keys in ${KEY_FILE}`);
-    }
-    keys = JSON.parse(readFileSync(KEY_FILE, "utf8"));
+function table(run) {
+  for (const s of run.steps) {
+    console.log(`  ${s.name.padEnd(26)} ${s.by.padEnd(10)} ${fmt(s.bytes ?? 0).padStart(7)} bytes  ${s.result}`);
   }
-  return {
-    key: keys.deployer,
-    deployer: getAddressFromPrivateKey(keys.deployer, "testnet"),
-    recipient: getAddressFromPrivateKey(keys.recipient, "testnet"),
-    master: Buffer.from(keys.master, "hex"),
+}
+
+// --- the scripted run -----------------------------------------------------------
+
+async function run() {
+  if (!SEND) {
+    const doc = await rehearse(rehearsalKeys());
+    write(REHEARSAL_FILE, doc);
+    log("rehearsal on simnet, under keys that are public. Nothing was sent.");
+    table(doc);
+    log(`${doc.steps.length} steps returned what the story expects. Written to ${shown(REHEARSAL_FILE)}`);
+    log("Send the run to testnet with: node testnet.mjs --send");
+    return;
+  }
+
+  const fresh = !existsSync(KEY_FILE);
+  const keys = loadKeys({ create: true });
+  const who = addresses(keys);
+  if (fresh) log(`made new testnet keys in ${KEY_FILE}`);
+  const state = existsSync(RUN_FILE) ? JSON.parse(readFileSync(RUN_FILE, "utf8")) : {};
+  if (state.roles && state.roles.deployer !== who.deployer) throw new Error(`${shown(RUN_FILE)} belongs to another key. Move it aside to start over.`);
+  // Keys that have sent transactions and no record of which: going on would send the first steps again.
+  if (!state.steps && (await get(`/extended/v1/address/${who.deployer}/nonces`))?.possible_next_nonce > 0) {
+    throw new Error(`the demo keys in ${KEY_FILE} have already sent transactions, and ${shown(RUN_FILE)} is missing. ` +
+      "Put the record back, or move the keys and their journal aside to start a new run.");
+  }
+
+  // The same run on a simnet first, under these addresses and keys.
+  const journal = fileJournal(JOURNAL);
+  await rehearse(keys, journal);
+  log(`rehearsed on simnet under the testnet keys. Deployer ${who.deployer}`);
+
+  if ((await stxBalance(who.deployer)) < 20_000_000n && !state.steps?.some((s) => s.name === "fund-submitter" && s.result)) {
+    log("asking the faucet for testnet STX");
+    await faucet(who.deployer);
+  }
+  log(`deployer balance ${amountText(await stxBalance(who.deployer), "stx")} STX`);
+
+  const net = netDriver({ keys, who, send: true, log });
+  const ws = wallets(keys, who, journal);
+  const { steps, requests, ends } = story({ who, wallets: ws, read: net.read });
+  const records = Object.fromEntries((state.steps ?? []).map((s) => [s.name, Object.fromEntries(RECORDED.filter((k) => k in s).map((k) => [k, s[k]]))]));
+  const started = state.started ?? new Date().toISOString();
+  const doc = (more = {}) => assemble({
+    network: "testnet", api: API, who, wallets: ws, steps, records,
+    requests: { ...state.requests, ...requests() }, started, live: state.live ?? [], ...more });
+  const save = (more) => write(RUN_FILE, doc(more));
+  save();
+  try {
+    await play(steps, net, { done: records, record: (s, rec) => { records[s.name] = rec; save(); } });
+  } catch (e) {
+    // A step that came back wrong is on chain as it is, and running again will
+    // read the same answer. Anyone can cause this: once the owner's signed
+    // request is public, a stranger may submit it before the script does.
+    if (/expected .* got /.test(e.message)) e.message += ` It is recorded in ${shown(RUN_FILE)}. To run the demo again, move the keys, their journal and that file aside.`;
+    throw e;
+  }
+
+  const final = { wots: await vaultState(net.read, ws.wots), lamport: await vaultState(net.read, ws.lamport) };
+  // Each step returned the right result. The vaults also have to stand where
+  // the story ends, unless withdrawals have been made by hand since.
+  if (!state.live?.length && JSON.stringify(final) !== JSON.stringify(ends)) {
+    throw new Error(`every step returned the expected result, but the vaults are not where the run should leave them: ${JSON.stringify(final)}`);
+  }
+  save({ final, finished: state.finished ?? new Date().toISOString() });
+  table(doc());
+  const paid = records.withdraw, big = records["withdraw-lamport"];
+  log(`WOTS+ withdrawal: ${fmt(paid.cost.runtime)} runtime, ${((100 * paid.cost.runtime) / TENURE_BUDGET.runtime).toFixed(3)}% of a tenure, ${fmt(paid.bytes)} bytes`);
+  log(`Lamport withdrawal: ${fmt(big.cost.runtime)} runtime, ${fmt(big.bytes)} bytes`);
+  log(`the WOTS+ vault is at nonce ${final.wots.nonce} with ${amountText(final.wots.stx, "stx")} STX. Written to ${shown(RUN_FILE)}`);
+}
+
+// --- a withdrawal made live -----------------------------------------------------
+
+async function withdraw() {
+  const [text, asset = "stx"] = rest;
+  const scheme = option("scheme") ?? "wots";
+  const keys = loadKeys();
+  const who = addresses(keys);
+  const net = netDriver({ keys, who, send: SEND, log });
+  const ws = wallets(keys, who, fileJournal(JOURNAL));
+  const w = ws[scheme];
+  if (!w) throw new Error(`unknown scheme ${scheme}: use wots or lamport`);
+  const amount = units(text, asset);
+  const recipient = option("to") ?? who.recipient;
+
+  // A withdrawal that was sent and never heard back from comes first. If the
+  // chain has it, its result is recorded and nothing new is signed: asking
+  // again must not turn one payment into two.
+  const state = existsSync(RUN_FILE) ? JSON.parse(readFileSync(RUN_FILE, "utf8")) : { network: "testnet", roles: who };
+  const callOf = (l) => {
+    const q = l.request, bytes = (h) => Buffer.from(h, "hex");
+    return { name: l.name, by: "submitter", kind: "call", ...withdrawCall(who, ws[q.scheme],
+      { id: bytes(q.vault), nonce: q.nonce, asset: q.asset, amount: BigInt(q.amount), recipient: q.recipient, nextKey: bytes(q.nextKey), sig: q.sig.map(bytes) }) };
   };
-}
-
-// --- chain access -------------------------------------------------------------
-
-async function get(path) {
-  for (let attempt = 0; ; attempt++) {
-    try {
-      const res = await fetch(API + path);
-      if (res.status === 404) return null;
-      if (res.ok) return await res.json();
-      if (attempt >= 5) throw new Error(`${path}: HTTP ${res.status} ${await res.text()}`);
-    } catch (e) {
-      if (attempt >= 5) throw e;
-    }
-    await sleep(3000 * (attempt + 1));
+  const keep = (entry) => {
+    state.live = [...(state.live ?? []).filter((l) => l.name !== entry.name), entry];
+    write(RUN_FILE, state);
+  };
+  const unsettled = (state.live ?? []).find((l) => l.txid && !l.result);
+  const onChain = unsettled && (await get(`/extended/v1/tx/${unsettled.txid}`));
+  if (onChain && !onChain.tx_status.startsWith("dropped")) {
+    if (!SEND) return log(`an earlier withdrawal, ${unsettled.title}, is on chain with no result recorded here. Run with --send to record it.`);
+    const rec = await net.exec(callOf(unsettled), { txid: unsettled.txid, nonce: unsettled.nonce });
+    if (state.final) state.final[unsettled.request.scheme] = await vaultState(net.read, ws[unsettled.request.scheme]);
+    keep({ ...unsettled, ...rec });
+    return log(`an earlier withdrawal, ${unsettled.title}, had been sent with no result recorded. It is confirmed: ${rec.result}. ` +
+      "Nothing new was signed. Run the command again if another withdrawal is wanted.");
   }
-}
 
-const stxBalance = async (address) => BigInt((await get(`/extended/v1/address/${address}/stx`))?.balance ?? 0);
-const isDeployed = async (address, name) => (await get(`/v2/contracts/interface/${address}/${name}`)) !== null;
+  const now = await vaultState(net.read, w);
+  if (!now) throw new Error("this vault is not open on testnet. Send the scripted run first.");
+  log(`${scheme} vault ${w.id.toString("hex").slice(0, 16)}... at nonce ${now.nonce}, holding ${amountText(now.stx, "stx")} STX and ${amountText(now.sbtc, "sbtc")} sBTC`);
 
-async function read(contract, fn, args = []) {
-  return cvToJSON(await fetchCallReadOnlyFunction({
-    contractAddress: deployer, contractName: contract, functionName: fn, functionArgs: args,
-    senderAddress: deployer, network: "testnet",
-  }));
-}
-
-async function mined(txid, what) {
-  for (let i = 0; i < 360; i++) {
-    const tx = await get(`/extended/v1/tx/${txid}`);
-    if (tx && tx.tx_status !== "pending") return tx;
-    if (i % 6 === 5) log(`  still waiting for ${what}`);
-    await sleep(10_000);
+  // The vault's current key signs once. If it has signed a request that has
+  // not confirmed, that request is the only one it may send, so that comes
+  // before any other reason to refuse.
+  const request = { nonce: now.nonce, asset, amount, recipient };
+  let u;
+  try { u = w.withdrawal(request); } catch (e) { throw new Error(`${e.message}. Nothing was signed.`); }
+  const held = w.signed(now.nonce);
+  if (held && held.digest !== u.digest.toString("hex")) {
+    throw new Error(`key ${now.nonce} has already signed ${amountText(held.amount, held.asset)} ${held.asset} to ${held.recipient}, and it has not confirmed. ` +
+      `Send it again with: node testnet.mjs withdraw ${amountText(held.amount, held.asset)} ${held.asset} --scheme ${scheme} --to ${held.recipient} --send`);
   }
-  throw new Error(`${what} was not mined within an hour: ${txid}`);
-}
+  // A request for more than the vault holds would use the key up and stay
+  // payable for as long as the key lasts.
+  if (!held && (amount === 0n || amount > BigInt(now[asset]))) throw new Error(`the vault cannot pay ${text} ${asset}. Nothing was signed.`);
 
-let dryNonce = 0n;
-const nextNonce = async () => (DRY ? dryNonce++ : fetchNonce({ address: deployer, network: "testnet" }));
-
-// Send a transaction and wait for it, or in a dry run report its size.
-async function send(transaction, what) {
-  const bytes = transaction.serializeBytes().length;
-  if (DRY) {
-    log(`${what}: ${bytes.toLocaleString("en-US")} bytes, not sent`);
-    return { dry: true, bytes };
+  if (!SEND) {
+    const digest = await net.read("pq-vault", "withdrawal-digest", [
+      Cl.buffer(u.id), Cl.uint(u.nonce), Cl.stringAscii(asset), Cl.uint(amount), Cl.principal(recipient), Cl.buffer(u.nextKey)]);
+    if (Cl.prettyPrint(digest) !== `0x${u.digest.toString("hex")}`) throw new Error("the contract computes a different digest");
+    log(`${text} ${asset} to ${recipient}: the contract agrees on the digest. ${held ? "Already signed, not sent." : "Not signed, not sent."} Add --send.`);
+    return;
   }
-  const res = await broadcastTransaction({ transaction, network: "testnet" });
-  if (!res.txid || res.error) throw new Error(`${what} was not accepted: ${JSON.stringify(res)}`);
-  log(`${what}: sent ${bytes.toLocaleString("en-US")} bytes, ${EXPLORER(res.txid)}`);
-  const tx = await mined(res.txid, what);
-  log(`  ${tx.tx_status}, block ${tx.block_height}, result ${tx.tx_result?.repr}`);
-  return { ...tx, bytes };
+
+  const r = await signChecked(net.read, w, request);
+  log(`signed with key ${now.nonce}: ${r.sig.length} words, ${fmt(r.sig.length * 32)} bytes. The verifier contract accepts it.`);
+  const name = `live-${scheme}-${now.nonce}`;
+  const step = { name, by: "submitter", kind: "call", ...withdrawCall(who, w, r) };
+  // The request and its transaction are recorded before anything is sent, so
+  // that sending it again after a failure sends the same transaction.
+  const earlier = (state.live ?? []).find((l) => l.name === name && !l.result);
+  const entry = (rec) => ({ name, title: `${amountText(amount, asset)} ${asset} to ${recipient}`, by: "submitter", sender: who.submitter,
+    call: `${step.contract}.${step.fn}`, ...rec, request: published(w, r) });
+  const rec = await net.exec(step, earlier && { txid: earlier.txid, nonce: earlier.nonce }, (sent) => keep(entry(sent)));
+  const after = await vaultState(net.read, w);
+  if (state.final) state.final[scheme] = after;
+  keep(entry(rec));
+  log(`${rec.result}. The vault is at nonce ${after.nonce} under key ${after.key.slice(0, 16)}... ${explorer(rec.txid)}`);
 }
 
-async function call(contract, fn, args, postConditions, what) {
-  const transaction = await makeContractCall({
-    contractAddress: deployer, contractName: contract, functionName: fn, functionArgs: args,
-    senderKey: key, network: "testnet", fee: FEES.call, nonce: await nextNonce(),
-    postConditionMode: PostConditionMode.Deny, postConditions,
-  });
-  return send(transaction, what);
-}
+// --- status ---------------------------------------------------------------------
 
-const record = (tx) => (tx.dry ? { bytes: tx.bytes } : {
-  txid: tx.tx_id, status: tx.tx_status, result: tx.tx_result?.repr, bytes: tx.bytes, fee: tx.fee_rate,
-  cost: { runtime: tx.execution_cost_runtime, readCount: tx.execution_cost_read_count, readLength: tx.execution_cost_read_length,
-          writeCount: tx.execution_cost_write_count, writeLength: tx.execution_cost_write_length },
-});
-
-// --- the run --------------------------------------------------------------------
-
-const { key, deployer, recipient, master } = loadKeys();
-const vault = `${deployer}.pq-vault`;
-const verifier = Cl.contractPrincipal(deployer, SCHEME);
-mkdirSync("results", { recursive: true });
-const state = !DRY && existsSync(STATE_FILE) ? JSON.parse(readFileSync(STATE_FILE, "utf8")) : {};
-if (state.deployer && state.deployer !== deployer) throw new Error(`${STATE_FILE} belongs to another key. Move it aside to start over.`);
-Object.assign(state, { network: "testnet", scheme: SCHEME, deployer, recipient });
-state.txs ??= {};
-const save = () => { if (!DRY) writeFileSync(STATE_FILE, JSON.stringify(state, null, 1) + "\n"); };
-const step = async (name, run) => {
-  if (state.txs[name]) return;
-  const tx = await run();
-  state.txs[name] = record(tx);
-  save();
-  return tx;
-};
-save();
-log(`${DRY ? "dry run, nothing is sent. " : ""}deployer ${deployer}`);
-
-// 1. Testnet STX for fees and the deposit, from the faucet.
-if (!DRY && (await stxBalance(deployer)) < 20_000_000n) {
-  log("asking the faucet for testnet STX");
-  const res = await fetch(`${API}/extended/v1/faucets/stx?address=${deployer}`, { method: "POST" });
-  const body = await res.text();
-  if (!res.ok) throw new Error(`the faucet refused: HTTP ${res.status} ${body}`);
-  for (let i = 0; (await stxBalance(deployer)) === 0n; i++) {
-    if (i > 90) throw new Error("the faucet's transfer did not arrive within 15 minutes");
-    await sleep(10_000);
+async function status() {
+  const keys = loadKeys();
+  const who = addresses(keys);
+  const net = netDriver({ keys, who });
+  for (const [scheme, w] of Object.entries(wallets(keys, who, fileJournal(JOURNAL)))) {
+    const v = await vaultState(net.read, w);
+    if (!v) { console.log(`${scheme.padEnd(8)} vault ${w.id.toString("hex")} is not open`); continue; }
+    const held = w.signed(v.nonce);
+    console.log(`${scheme.padEnd(8)} vault ${w.id.toString("hex")}\n         nonce ${v.nonce}, key ${v.key.slice(0, 16)}..., ${amountText(v.stx, "stx")} STX, ${amountText(v.sbtc, "sbtc")} sBTC`);
+    console.log(`         ${held ? `key ${v.nonce} has signed ${amountText(held.amount, held.asset)} ${held.asset} to ${held.recipient}, not yet confirmed` : `key ${v.nonce} has signed nothing`}`);
   }
-}
-if (!DRY) log(`balance ${Number(await stxBalance(deployer)) / 1e6} STX`);
-
-// 2. Contracts.
-for (const name of CONTRACTS) {
-  if (!DRY && (await isDeployed(deployer, name))) continue;
-  const transaction = await makeContractDeploy({
-    contractName: name, codeBody: source(name), clarityVersion: ClarityVersion.Clarity6,
-    senderKey: key, network: "testnet", fee: FEES.deploy, nonce: await nextNonce(),
-    postConditionMode: PostConditionMode.Deny,
-  });
-  const tx = await send(transaction, `deploy ${name}`);
-  if (!DRY && tx.tx_status !== "success") throw new Error(`deploying ${name} failed`);
-  state.txs[`deploy ${name}`] = record(tx);
-  save();
+  for (const role of ROLES) console.log(`${role.padEnd(10)} ${who[role]}  ${amountText(await stxBalance(who[role]), "stx")} STX`);
 }
 
-// 3. A vault under one-time key 0, funded with STX and mock sBTC. Its id
-// follows from the key and the verifier, so the script knows it beforehand
-// and never opens a second vault under the same key.
-const owner = wallet({ master, chainId: CHAIN_ID, vault, verifier: `${deployer}.${SCHEME}`, scheme: SCHEME, account: 0 });
-const id = Cl.buffer(owner.id);
-state.vaultId = owner.id.toString("hex");
-const onChain = async () => (DRY ? null : (await read("pq-vault", "get-vault", [id])).value);
-if (!(await onChain())) {
-  const tx = await call("pq-vault", "open", [Cl.buffer(owner.key(0)), verifier], [], "open a vault");
-  if (!DRY && tx.tx_status !== "success") throw new Error("opening the vault failed");
-  state.txs.open = record(tx);
-  save();
+// --- report ---------------------------------------------------------------------
+
+async function report() {
+  const keys = loadKeys();
+  const doc = JSON.parse(readFileSync(RUN_FILE, "utf8"));
+  if (doc.roles.deployer !== addresses(keys).deployer) throw new Error(`${RUN_FILE} belongs to another key`);
+  if (!doc.final) throw new Error("the run has not finished. Send it first.");
+
+  // The same steps on a simnet under the same keys, so each digest and
+  // signature is the one testnet saw.
+  const sim = Object.fromEntries((await rehearse(keys, fileJournal(JOURNAL))).steps.map((s) => [s.name, s]));
+  // The source testnet holds for each contract, against contracts/.
+  for (const name of CONTRACTS) {
+    const deployed = await get(`/v2/contracts/source/${doc.roles.deployer}/${name}`);
+    if (deployed?.source !== source(name)) throw new Error(`${name} on testnet is not the source in contracts/`);
+  }
+  // What each transaction moved, read from the chain, against what the story
+  // says it asked for. The demo page draws its transfers from the story, so
+  // this is what ties them to the chain: a paid step moved exactly that, and a
+  // refused step moved nothing.
+  const place = { ...doc.roles, wots: doc.contracts["pq-vault"], lamport: doc.contracts["pq-vault"] };
+  for (const s of doc.steps) {
+    if (!s.txid || s.kind === "deploy") continue;
+    const events = (await get(`/extended/v1/tx/events?tx_id=${s.txid}&limit=50`))?.events ?? [];
+    const moved = events.filter((e) => e.asset && ["transfer", "mint"].includes(e.asset.asset_event_type))
+      .map((e) => `${e.asset.amount} ${e.event_type === "stx_asset" ? "stx" : "sbtc"} ${e.asset.sender || "minted"} > ${e.asset.recipient}`);
+    const from = s.call === "sbtc-token.mint" ? "minted" : place[s.asks?.from];
+    const asked = s.asks && s.result.startsWith("(ok") ? [`${s.asks.amount} ${s.asks.asset} ${from} > ${place[s.asks.to]}`] : [];
+    if (JSON.stringify(moved) !== JSON.stringify(asked)) throw new Error(`${s.name}: the chain shows [${moved}], the story says [${asked}]`);
+  }
+
+  const row = (s) => {
+    // Simnet does not charge a deployment's analysis, so those are not compared.
+    const mine = s.cost?.runtime, theirs = s.kind === "deploy" ? undefined : sim[s.name].cost?.runtime;
+    const diff = mine && theirs ? `${mine >= theirs ? "+" : ""}${((100 * (mine - theirs)) / theirs).toFixed(2)}%` : "";
+    return `| ${s.title} | ${s.by} | \`${s.result}\` | ${mine ? fmt(mine) : ""} | ${theirs ? fmt(theirs) : ""} | ${diff} | ${s.bytes ? fmt(s.bytes) : ""} | ${s.txid ? `[${s.txid.slice(0, 10)}](${explorer(s.txid)})` : ""} |`;
+  };
+  const paid = doc.steps.find((s) => s.name === "withdraw"), big = doc.steps.find((s) => s.name === "withdraw-lamport");
+  const pct = (s) => `${((100 * s.cost.runtime) / TENURE_BUDGET.runtime).toFixed(3)}%`;
+  const vault = (scheme, v) => `- ${scheme}: \`${doc.vaults[scheme].id}\`, at nonce ${v.nonce}, holding ${amountText(v.stx, "stx")} STX and ${amountText(v.sbtc, "sbtc")} mock sBTC`;
+
+  writeFileSync(REPORT_FILE, `# The demo run on testnet
+
+\`node testnet.mjs --send\` ran on ${doc.started.slice(0, 10)} against Stacks testnet at Epoch ${doc.epoch}, Clarity ${doc.clarity}. \`node testnet.mjs report\` then ran the same steps on simnet under the same keys, to compare cost, and wrote this file.
+
+Four throwaway accounts took part. None of them can move a vault's funds.
+
+| Account | Address |
+| --- | --- |
+${ROLES.map((role) => `| ${role} | \`${doc.roles[role]}\` |`).join("\n")}
+
+## Steps
+
+| Step | Sent by | Result | Runtime, testnet | Runtime, simnet | Difference | Bytes | Transaction |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+${doc.steps.map(row).join("\n")}
+
+\`(err u205)\` is a signature that does not match, and \`(err u203)\` is a nonce that was already used.
+
+Simnet does not charge the analysis of a new contract, so deployments have no simnet figure.
+
+A WOTS+ withdrawal cost ${fmt(paid.cost.runtime)} runtime, ${pct(paid)} of a tenure's budget, in ${fmt(paid.bytes)} bytes. A Lamport withdrawal cost ${fmt(big.cost.runtime)} runtime, ${pct(big)}, in ${fmt(big.bytes)} bytes.
+
+## Vaults at the end of the run
+
+${Object.entries(doc.final).map(([scheme, v]) => vault(scheme, v)).join("\n")}
+
+## Checked against the chain
+
+When this file was written, two things were read back from testnet. The source held for each contract is the source in \`contracts/\`, byte for byte. And each transaction's transfers are the ones the story says: a paid step moved exactly the amount, from and to the parties named, and a refused step moved nothing.
+
+## Contracts
+
+${CONTRACTS.map((c) => `- \`${doc.contracts[c]}\``).join("\n")}
+
+## What it does not show
+
+- Real sBTC. The token is a mock with the same transfer check as \`sbtc-token\`.
+- Behaviour under load, or a realistic fee. Every transaction paid a fixed fee on a quiet network.
+- A wallet or a relayer. The requests were signed by a script.
+- A review. No engineer outside this work and no cryptographer has read the contracts.
+
+## The keys
+
+The accounts' keys and the vaults' master secret are in \`~/.config/pq-vault/demo.json\`, outside the repository and readable only by its owner, next to the journal of what each one-time key has signed. They hold faucet STX and control a mock token. Do not fund them on mainnet.
+`);
+  log(`the deployed source matches contracts/, and every step moved what the story says. Written to ${shown(REPORT_FILE)}`);
 }
-log(`vault ${state.vaultId}`);
-const sent = (amount) => [Pc.principal(deployer).willSendEq(amount).ustx()];
-await step("deposit STX", () => call("pq-vault", "deposit-stx", [id, Cl.uint(DEPOSIT)], sent(DEPOSIT), "deposit 5 STX"));
-await step("mint mock sBTC", () => call("sbtc-token", "mint", [Cl.uint(SBTC), Cl.standardPrincipal(deployer)], [], "mint mock sBTC"));
-await step("deposit sBTC", () => call("pq-vault", "deposit-sbtc", [id, Cl.uint(SBTC)],
-  [Pc.principal(deployer).willSendEq(SBTC).ft(`${deployer}.sbtc-token`, "sbtc")], "deposit mock sBTC"));
 
-// 4. One signed withdrawal. Before anything is sent, the contract has to agree
-// on the digest, because a one-time key cannot be used to try again.
-// The request is always the same one, so running the script again signs
-// nothing new with key 0.
-const nonce = DRY ? 0 : Number((await onChain()).value.nonce.value);
-const request = owner.signWithdrawal({ nonce: 0, asset: "stx", amount: AMOUNT, recipient });
-if (!DRY && nonce === 0) {
-  const digest = await read("pq-vault", "withdrawal-digest",
-    [id, Cl.uint(0), Cl.stringAscii("stx"), Cl.uint(AMOUNT), Cl.standardPrincipal(recipient), Cl.buffer(request.nextKey)]);
-  if (digest.value.replace(/^0x/, "") !== request.digest.toString("hex")) throw new Error("the contract computes a different digest. Nothing was sent.");
-  log("the contract and the wallet agree on the digest");
-}
-const withdraw = (to, what) => call("pq-vault", "withdraw-stx",
-  [id, Cl.uint(0), Cl.uint(AMOUNT), Cl.standardPrincipal(to), Cl.buffer(request.nextKey), verifier, sigCV(request.sig)],
-  [Pc.principal(vault).willSendLte(AMOUNT).ustx()], what);
+// Output cut short by a closed pipe, as with `| head`, is not an error.
+process.stdout.on("error", (e) => { if (e.code === "EPIPE") process.exit(0); throw e; });
 
-// The same signature with the recipient changed to the submitter. Refused.
-await step("altered", () => withdraw(deployer, "altered request, recipient changed"));
-// The request as signed. Paid.
-await step("withdraw", () => withdraw(recipient, "signed withdrawal of 1 STX"));
-// The same request again. Refused on its nonce.
-await step("replay", () => withdraw(recipient, "replay of the paid request"));
-
-// 5. Report.
-if (DRY) {
-  log("dry run complete. Run without --dry-run to send these to testnet.");
-} else {
-  const after = (await onChain()).value;
-  state.vault = { nonce: Number(after.nonce.value), stx: after.stx.value, sbtc: after.sbtc.value, key: after.key.value };
-  save();
-  const w = state.txs.withdraw;
-  log(`altered: ${state.txs.altered.result}   paid: ${w.result}   replay: ${state.txs.replay.result}`);
-  log(`withdrawal: ${w.cost.runtime.toLocaleString("en-US")} runtime, ${((100 * w.cost.runtime) / TENURE_BUDGET.runtime).toFixed(3)}% of a tenure, ${w.bytes.toLocaleString("en-US")} bytes`);
-  log(`vault now at nonce ${state.vault.nonce} with ${Number(state.vault.stx) / 1e6} STX. Results in ${STATE_FILE}`);
+try {
+  ({ command, rest, options, send: SEND } = parse(process.argv.slice(2)));
+  await { run, withdraw, status, report }[command]();
+} catch (e) {
+  console.error(e.message);
+  process.exitCode = 1;
 }
