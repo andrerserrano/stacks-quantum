@@ -16,7 +16,7 @@ The page shows the latest run in `data/run.json`. Until a run has been sent to t
 
 ## Hosted copy
 
-A copy is on Vercel at https://pq-vault-demo-oo1b1vhoo-andre-serranos-projects.vercel.app, deployed on 9 October 2026. Only someone signed in to the Vercel account that owns the project can open it: anyone else is sent to Vercel's sign-in. The project's public address, `pq-vault-demo.vercel.app`, holds a placeholder that says nothing is published there.
+The current [Vercel preview](https://pq-vault-demo-l4qz6ho3t-andre-serranos-projects.vercel.app/) was reviewed on 12 October 2026. It is protected by Vercel sign-in; reviewers need access to the deployment. The project's public address, `pq-vault-demo.vercel.app`, holds a placeholder that says nothing is published there.
 
 To host a new copy, after `vercel login`:
 

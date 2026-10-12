@@ -2,7 +2,7 @@
 
 A Clarity vault for STX and sBTC whose withdrawals need a hash-based one-time signature. Proof of concept on simnet and testnet, unaudited. Do not put real funds behind it.
 
-The design, the reasoning and the open questions are in the tech spec: https://claude.ai/code/artifact/f2775991-0cff-4527-bb10-fc2258232029
+The design, reasoning, and open questions are in the [technical spec](https://docs.google.com/document/d/1wi2fEe-3VggqgEIJ24HKG12myg7DU-RYRIxp9HmYgic/edit).
 
 ## What it shows
 
