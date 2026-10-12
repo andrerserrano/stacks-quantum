@@ -5,3 +5,4 @@ node_modules/
 docs/
 # The hosted copy of the demo page, and its link to the Vercel project.
 site/.share/
+/session/
