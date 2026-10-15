@@ -2,7 +2,7 @@
 
 On 15 October 2026, a Clarity vault verified a Lamport one-time signature and released **1,000 sats of official mainnet sBTC** to the signed recipient. A separate Stacks account submitted the withdrawal and paid its fee.
 
-The seven-transaction demonstration completed successfully with **4.114578 STX in total fees**. The vault is empty and retired operationally. Do not send it more funds.
+The seven-transaction demonstration completed successfully with **4.114578 STX in total fees**.
 
 [View the mainnet withdrawal](https://explorer.hiro.so/txid/0xb983fa37d30d5ece2c2d3d539885cf5d6f2394245a733d76820a6fa9ca6a5b97?chain=mainnet) or read the [full result](mainnet/Mainnet-demo-result.md).
 
@@ -26,8 +26,6 @@ The submitting account cannot change the signed payment details. Each Lamport ke
 | Withdrawal runtime | 1,062,385 units |
 | Withdrawal reads / writes | 13 / 3 |
 | Final vault balance / nonce | 0 sBTC / 1 |
-
-These are measurements from the completed run, not guarantees of production fees or throughput. All seven transactions passed six canonical Stacks block confirmations; a later public recheck observed at least 238 confirmations.
 
 ## Source and evidence
 
