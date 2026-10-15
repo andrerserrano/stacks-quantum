@@ -4,12 +4,17 @@ Bitcoin and Stacks rely on signatures that a sufficiently powerful quantum compu
 
 This experiment tests whether a Clarity contract can verify hash-based signatures for vault withdrawals without protocol changes. The goal is to give Engineering a working example, measured costs, and clear limitations to assess before choosing the next approach.
 
-**Testnet proof of concept. No independent cryptography review. Use test funds only.**
+**Experimental proof of concept.** On 15 October 2026, a mainnet Lamport withdrawal paid 1,000 sats of official sBTC. All seven demo transactions succeeded; fees totaled 4.114578 STX. The mainnet vault is empty and retired operationally. No independent cryptographic audit or production readiness is claimed.
+
+Start with the [mainnet result](mainnet/Mainnet-demo-result.md) and [engineering review guide](mainnet/README.md). The original testnet implementation and results remain below for comparison.
 
 ## Review the work
 
 | Resource | Purpose |
 | --- | --- |
+| [Mainnet result and evidence](mainnet/Mainnet-demo-result.md) | Seven confirmed transactions, official sBTC payout, fees and final vault state. |
+| [Mainnet source and tests](mainnet/README.md) | Exact executed candidate, reproducible local tests and review instructions. |
+| [Mainnet proposal](mainnet/Mainnet-sBTC-Lamport-technical-proposal.md) | Scoped design, execution update and Lamport format appendix. |
 | [PRD](https://docs.google.com/document/d/1gDLMFcaVvd-T91cFN9qYM4vl3W83feWAF22VHPndSnI/edit) | Research, pilot scope, and proposed next steps. |
 | [Technical spec](https://docs.google.com/document/d/1wi2fEe-3VggqgEIJ24HKG12myg7DU-RYRIxp9HmYgic/edit) | Design, risks, and open questions. |
 | [Demo](https://pq-vault-demo-l4qz6ho3t-andre-serranos-projects.vercel.app/) | Transactions and a live signature check. Protected preview; reviewers need access. |
@@ -34,7 +39,7 @@ The WOTS+ withdrawal used 0.024% of the runtime budget and 0.03% of allowed read
 ## Limits
 
 - The vault tests withdrawal authorization. Stacks transaction signing, block approval, and sBTC’s Bitcoin reserve remain unchanged.
-- The sBTC path uses a test token. Real sBTC integration has not been tested.
+- The original testnet sBTC path uses a test token. The separate mainnet candidate completed one withdrawal using the official deployed sBTC token; broader integration and recovery remain unproven.
 - Each key must sign only one distinct request. The signer records signatures to prevent reuse; restoring the secret without that record can lose the safeguard.
 - The custom signature construction has not had independent cryptographic review. Wallet integration and recovery remain open.
 

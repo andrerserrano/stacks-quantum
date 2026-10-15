@@ -1,0 +1,252 @@
+{
+  "verifiedAt": "2026-10-15T21:46:50.436Z",
+  "network": "mainnet",
+  "chainId": 1,
+  "candidateSha256": "f20785dfe1a21e3f8098cfa2268352f5ed07ebf8074ebaa4dc0a161a831535b4",
+  "token": "SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token",
+  "amountSats": "1000",
+  "recipient": "SPTXG7A1RB8VZ0GM9SAQEKWHHYZ95MCNMGSM75P6",
+  "vault": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.pq-vault",
+  "verifier": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.lamport",
+  "vaultId": "fe0210f978e2e9ac46a0ab186cfc0b02315fe3032796111e640126985b216e33",
+  "digest": "acf6fd5dbf73bc707b0fe045061ed386f024486f71034862c0584a40109c31a0",
+  "sourceHashes": {
+    "pq-verifier-trait": "a135d9a13766aa5a26aa12ce165c181c25b5ae6dd75c1f5fd4a7af553aa97bde",
+    "lamport": "6ba17e17fd5aa8e76a2750c875bf3b4a6ef80dfb607b578ea0623dcab1a6f3ae",
+    "pq-vault": "649c1fc83b8d50463c93efff5f40f7fc223277df99357eb29d3033e0bb8df2f6"
+  },
+  "minimumStacksConfirmations": 6,
+  "feeCapMicroStx": "20000000",
+  "actualFeesMicroStx": "4114578",
+  "actualFeesStx": 4.114578,
+  "transactions": [
+    {
+      "label": "deploy-pq-verifier-trait",
+      "txid": "0x8cf1e01c644e319b5459d4309882b34e835f6e1f22451370d923147e1e11be66",
+      "bytes": 643,
+      "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+      "nonce": "0",
+      "feeMicroStx": "519960",
+      "feeBasis": "Live low-priority node estimate",
+      "status": "success",
+      "result": "(ok true)",
+      "canonical": true,
+      "blockHeight": 9219303,
+      "blockHash": "0x43f3f3bc22921df33d0de540184ecdb39815c9de2cf395c70bf2a8c3c4b634f6",
+      "confirmations": 171,
+      "executionCost": {
+        "runtime": 26720,
+        "readCount": 1,
+        "readLength": 1,
+        "writeCount": 2,
+        "writeLength": 529
+      },
+      "transfers": [],
+      "explorer": "https://explorer.hiro.so/txid/0x8cf1e01c644e319b5459d4309882b34e835f6e1f22451370d923147e1e11be66?chain=mainnet"
+    },
+    {
+      "label": "deploy-lamport",
+      "txid": "0x3f49752268c826b47c0f1fbf542a246e3d967734bc57ef91c2537d972b72b5fd",
+      "bytes": 2280,
+      "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+      "nonce": "1",
+      "feeMicroStx": "520170",
+      "feeBasis": "Live low-priority node estimate",
+      "status": "success",
+      "result": "(ok true)",
+      "canonical": true,
+      "blockHeight": 9219314,
+      "blockHash": "0x1e5915dda85f9addd027e7a692f7c4e35c21b8a27e25b9ae35d3b65e5e0522b0",
+      "confirmations": 161,
+      "executionCost": {
+        "runtime": 116918,
+        "readCount": 1,
+        "readLength": 1,
+        "writeCount": 2,
+        "writeLength": 2429
+      },
+      "transfers": [],
+      "explorer": "https://explorer.hiro.so/txid/0x3f49752268c826b47c0f1fbf542a246e3d967734bc57ef91c2537d972b72b5fd?chain=mainnet"
+    },
+    {
+      "label": "deploy-pq-vault",
+      "txid": "0xa5f90934b13f34a8b0c42398285b1583e082772c6f69b6788b5cb2d89370915f",
+      "bytes": 6122,
+      "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+      "nonce": "2",
+      "feeMicroStx": "824268",
+      "feeBasis": "Live low-priority node estimate",
+      "status": "success",
+      "result": "(ok true)",
+      "canonical": true,
+      "blockHeight": 9219352,
+      "blockHash": "0xa1e0608614823ee1ee08c0f600a673e8f139b8221fc4a9659e80e1a58ea94b6a",
+      "confirmations": 124,
+      "executionCost": {
+        "runtime": 369222,
+        "readCount": 4,
+        "readLength": 51,
+        "writeCount": 3,
+        "writeLength": 7093
+      },
+      "transfers": [],
+      "explorer": "https://explorer.hiro.so/txid/0xa5f90934b13f34a8b0c42398285b1583e082772c6f69b6788b5cb2d89370915f?chain=mainnet"
+    },
+    {
+      "label": "open-vault",
+      "txid": "0xaf60c7c6e1a7dd9b3f4bbb25b656438428bd400208e00be20c7e5b947fda2dd8",
+      "bytes": 222,
+      "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+      "nonce": "3",
+      "feeMicroStx": "250000",
+      "feeBasis": "Explicit first-call bid: node returned NoEstimateAvailable",
+      "status": "success",
+      "result": "(ok 0xfe0210f978e2e9ac46a0ab186cfc0b02315fe3032796111e640126985b216e33)",
+      "canonical": true,
+      "blockHeight": 9219361,
+      "blockHash": "0x50aeef59c599afe91885b0b734edc0d99600e71f42f821b1299827ce855bd670",
+      "confirmations": 117,
+      "executionCost": {
+        "runtime": 49112,
+        "readCount": 4,
+        "readLength": 6112,
+        "writeCount": 1,
+        "writeLength": 190
+      },
+      "transfers": [],
+      "explorer": "https://explorer.hiro.so/txid/0xaf60c7c6e1a7dd9b3f4bbb25b656438428bd400208e00be20c7e5b947fda2dd8?chain=mainnet"
+    },
+    {
+      "label": "deposit-sbtc",
+      "txid": "0x36ccaa6d962ea8e799d5767d555dd44418796748d5b40c962f81318b0cf6aea3",
+      "bytes": 292,
+      "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+      "nonce": "4",
+      "feeMicroStx": "500000",
+      "feeBasis": "Explicit first-call bid: node returned NoEstimateAvailable",
+      "status": "success",
+      "result": "(ok true)",
+      "canonical": true,
+      "blockHeight": 9219375,
+      "blockHash": "0xfdf71ae2d5f98ad7632d60bd0e159e79c20592c9ef4e1d05a604c6ed043a06a7",
+      "confirmations": 104,
+      "executionCost": {
+        "runtime": 15630,
+        "readCount": 10,
+        "readLength": 11112,
+        "writeCount": 3,
+        "writeLength": 191
+      },
+      "transfers": [
+        {
+          "type": "fungible_token_asset",
+          "asset_event_type": "transfer",
+          "asset_id": "SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token::sbtc-token",
+          "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+          "recipient": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.pq-vault",
+          "amount": "1000"
+        }
+      ],
+      "explorer": "https://explorer.hiro.so/txid/0x36ccaa6d962ea8e799d5767d555dd44418796748d5b40c962f81318b0cf6aea3?chain=mainnet"
+    },
+    {
+      "label": "fund-submitter",
+      "txid": "0x8b931358ce861b88dae2df57833a3de28b742825e048ee3c9ee92a5888ab223c",
+      "bytes": 180,
+      "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+      "nonce": "5",
+      "feeMicroStx": "180",
+      "feeBasis": "Live low-priority node estimate",
+      "status": "success",
+      "result": "(ok true)",
+      "canonical": true,
+      "blockHeight": 9219391,
+      "blockHash": "0x6270e0fa3d43d40c6119bf7f3d8d9064a9a2c5a5048d29c01eaa867da24ff7f7",
+      "confirmations": 89,
+      "executionCost": {
+        "runtime": 0,
+        "readCount": 0,
+        "readLength": 0,
+        "writeCount": 0,
+        "writeLength": 0
+      },
+      "transfers": [
+        {
+          "type": "stx_asset",
+          "asset_event_type": "transfer",
+          "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+          "recipient": "SP366BJPDWZ8GRF0J3S7TR5C6TDD2P9N6JG14PM4P",
+          "amount": "2000000",
+          "memo": "0x00000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "explorer": "https://explorer.hiro.so/txid/0x8b931358ce861b88dae2df57833a3de28b742825e048ee3c9ee92a5888ab223c?chain=mainnet"
+    },
+    {
+      "label": "withdraw-sbtc",
+      "txid": "0xb983fa37d30d5ece2c2d3d539885cf5d6f2394245a733d76820a6fa9ca6a5b97",
+      "bytes": 19357,
+      "sender": "SP366BJPDWZ8GRF0J3S7TR5C6TDD2P9N6JG14PM4P",
+      "nonce": "0",
+      "feeMicroStx": "1500000",
+      "feeBasis": "Explicit first-call bid: node returned NoEstimateAvailable",
+      "status": "success",
+      "result": "(ok true)",
+      "canonical": true,
+      "blockHeight": 9219404,
+      "blockHash": "0x8e2af353998a18ac91289f0a7ae12cf357612b70dfa030cca19c27f1c27c97e5",
+      "confirmations": 78,
+      "executionCost": {
+        "runtime": 1062385,
+        "readCount": 13,
+        "readLength": 13264,
+        "writeCount": 3,
+        "writeLength": 191
+      },
+      "transfers": [
+        {
+          "type": "fungible_token_asset",
+          "asset_event_type": "transfer",
+          "asset_id": "SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token::sbtc-token",
+          "sender": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.pq-vault",
+          "recipient": "SPTXG7A1RB8VZ0GM9SAQEKWHHYZ95MCNMGSM75P6",
+          "amount": "1000"
+        }
+      ],
+      "explorer": "https://explorer.hiro.so/txid/0xb983fa37d30d5ece2c2d3d539885cf5d6f2394245a733d76820a6fa9ca6a5b97?chain=mainnet"
+    }
+  ],
+  "finalVault": {
+    "key": "5446aaa38932ba1282efab0b0c3f0a76bec635d71d67a2f56dc059b7fce8affd",
+    "nonce": "1",
+    "sbtc": "0",
+    "stx": "0",
+    "verifier": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.lamport"
+  },
+  "vaultSbtcSats": "0",
+  "balances": {
+    "operator": {
+      "address": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+      "availableStxMicro": "15385422",
+      "sbtcSats": "0"
+    },
+    "submitter": {
+      "address": "SP366BJPDWZ8GRF0J3S7TR5C6TDD2P9N6JG14PM4P",
+      "availableStxMicro": "500000",
+      "sbtcSats": "0"
+    },
+    "recipient": {
+      "address": "SPTXG7A1RB8VZ0GM9SAQEKWHHYZ95MCNMGSM75P6",
+      "availableStxMicro": "0",
+      "sbtcSats": "1000"
+    }
+  },
+  "recipientSbtcBefore": "0",
+  "recipientIncreaseSats": "1000",
+  "oneTimeKeyClaims": 1,
+  "initialClaimDigest": "acf6fd5dbf73bc707b0fe045061ed386f024486f71034862c0584a40109c31a0",
+  "authorizationFileSha256": "d899d4a625900cf41191dfed6a12f8e305acf2b1e8373c59d60aff27bc5b7266",
+  "complete": true,
+  "retiredOperationally": true,
+  "limitations": "One experimental withdrawal; no production audit, protocol change, many-time signing, consensus or Bitcoin reserve protection."
+}

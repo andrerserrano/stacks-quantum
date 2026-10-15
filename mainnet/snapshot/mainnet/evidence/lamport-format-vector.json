@@ -1,0 +1,18 @@
+{
+  "purpose": "Public verifier-format conformance fixture; unrelated to demo custody keys",
+  "masterHex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "chainId": 1,
+  "vault": "SP000000000000000000002Q6VF78.pq-vault",
+  "verifier": "SP000000000000000000002Q6VF78.lamport",
+  "account": 0,
+  "index": 0,
+  "path": "pq-vault/v1/1/SP000000000000000000002Q6VF78.pq-vault/lamport/0/0",
+  "seedHex": "1302574cb60210fbe20172f97328e7c24dc458340e654c1dfd5ab96f8807c440",
+  "keyHex": "42cc3dbfb86e27820ffb40a7eb597436a0e134a10d5fc8e056e6f8fe5b750ee8",
+  "digestHex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "signatureWordCount": 512,
+  "signatureBytes": 16384,
+  "signatureSha256": "d50b2196f26757c74130241a307f816229f29cbf6423945801f45ef9a2f3cc78",
+  "firstRevealedWord": "afa68a69e4e293dff67c2a0ee1d119de1629bf1129714ef7b45401bc97d57843",
+  "firstOtherHash": "9e042f2a710bc62e8858ab9c86a269fb5cc705cbb5446f1c9f7eeed77f329e67"
+}

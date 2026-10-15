@@ -1,0 +1,13 @@
+diff --git a/vault/contracts/pq-vault.clar b/mainnet/snapshot/mainnet/contracts/pq-vault.clar
+index a888a3c..0d7d384 100644
+--- a/vault/contracts/pq-vault.clar
++++ b/mainnet/snapshot/mainnet/contracts/pq-vault.clar
+@@ -0,0 +1,2 @@
++;; Mainnet candidate: sBTC calls are fixed to the official deployed token.
++;; Derived from the testnet prototype; no deployment has occurred.
+@@ -62 +64 @@
+-    (try! (contract-call? .sbtc-token transfer amount tx-sender current-contract none))
++    (try! (contract-call? 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token transfer amount tx-sender current-contract none))
+@@ -118 +120 @@
+-    (contract-call? .sbtc-token transfer amount current-contract recipient none)))
++    (contract-call? 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token transfer amount current-contract recipient none)))

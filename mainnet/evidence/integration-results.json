@@ -1,0 +1,87 @@
+{
+  "generatedAt": "2026-10-15T21:09:04.470Z",
+  "localOnly": true,
+  "liveTransactions": 0,
+  "token": "SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token",
+  "tokenSourceSha256": "8f0a0edd55fa25613aac50769cf18a671227333850950d4f7f1f913ea0a9c8d1",
+  "testSourceSha256": "85176176a8de5fe95378d7bd0d08dce09d31ddb14013e69441515822e377e567",
+  "contractSourceSha256": {
+    "pq-vault": "649c1fc83b8d50463c93efff5f40f7fc223277df99357eb29d3033e0bb8df2f6",
+    "lamport": "6ba17e17fd5aa8e76a2750c875bf3b4a6ef80dfb607b578ea0623dcab1a6f3ae",
+    "pq-verifier-trait": "a135d9a13766aa5a26aa12ce165c181c25b5ae6dd75c1f5fd4a7af553aa97bde"
+  },
+  "contractRejections": [
+    {
+      "case": "changed recipient",
+      "vaultResponse": "(err u205)",
+      "stateAndBalancesUnchanged": true,
+      "events": []
+    },
+    {
+      "case": "changed amount",
+      "vaultResponse": "(err u205)",
+      "stateAndBalancesUnchanged": true,
+      "events": []
+    },
+    {
+      "case": "changed successor",
+      "vaultResponse": "(err u205)",
+      "stateAndBalancesUnchanged": true,
+      "events": []
+    },
+    {
+      "case": "invalid signature",
+      "vaultResponse": "(err u205)",
+      "stateAndBalancesUnchanged": true,
+      "events": []
+    },
+    {
+      "case": "current key as successor",
+      "vaultResponse": "(err u201)",
+      "stateAndBalancesUnchanged": true,
+      "events": []
+    },
+    {
+      "case": "completed withdrawal replay",
+      "vaultResponse": "(err u203)",
+      "stateAndBalancesUnchanged": true,
+      "events": []
+    },
+    {
+      "case": "(ok false)",
+      "vaultResponse": "(err u205)",
+      "stateAndBalancesUnchanged": true,
+      "events": []
+    },
+    {
+      "case": "(err u777)",
+      "vaultResponse": "(err u205)",
+      "stateAndBalancesUnchanged": true,
+      "events": []
+    }
+  ],
+  "scenarios": [
+    "persistent journal refuses a different message; exact retry allowed",
+    "JS and Clarity digests match",
+    "changed recipient rejected without changing balance or state",
+    "changed amount rejected without changing balance or state",
+    "changed successor rejected without changing balance or state",
+    "invalid signature rejected without changing balance or state",
+    "current key cannot be its own successor",
+    "digest separates mainnet and testnet",
+    "different carrier pays sBTC to the signed recipient; vault drained and key advanced",
+    "replay rejected",
+    "pinned verifier (ok false) produces vault (err u205); no state, balance or event effects",
+    "pinned verifier (err u777) produces vault (err u205); no state, balance or event effects",
+    "failed token transfer rolls back vault key, nonce and ledger"
+  ],
+  "chainId": 2147483648,
+  "withdrawalCosts": {
+    "writeLength": 191,
+    "writeCount": 3,
+    "readLength": 13097,
+    "readCount": 13,
+    "runtime": 1062220
+  },
+  "passed": true
+}

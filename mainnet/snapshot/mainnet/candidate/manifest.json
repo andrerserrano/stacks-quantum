@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "network": "mainnet",
+  "chainId": 1,
+  "token": "SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token",
+  "amountSats": "1000",
+  "feeCapMicroStx": "20000000",
+  "feePriority": "low",
+  "confirmations": 6,
+  "submitterReserveMicroStx": "2000000",
+  "firstCallFeesMicroStx": {
+    "open-vault": "250000",
+    "deposit-sbtc": "500000",
+    "withdraw-sbtc": "1500000"
+  },
+  "accounts": {
+    "operator": {
+      "address": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP",
+      "publicKey": "0329df249a39a1c81657a63d2a413c41f0706df80e27b083aeabec1f32d3879b98",
+      "startNonce": "0"
+    },
+    "submitter": {
+      "address": "SP366BJPDWZ8GRF0J3S7TR5C6TDD2P9N6JG14PM4P",
+      "publicKey": "038a123a51775c2a1c351f40d478e77e1c51d58bdfb0008493f89d29bfec21a5f6",
+      "startNonce": "0"
+    },
+    "recipient": {
+      "address": "SPTXG7A1RB8VZ0GM9SAQEKWHHYZ95MCNMGSM75P6",
+      "publicKey": "0385796a37fe5afc941441773daa9357f68c9dba86c6941aea561b83fda63767e5",
+      "startNonce": "0"
+    }
+  },
+  "vault": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.pq-vault",
+  "verifier": "SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.lamport",
+  "recipient": "SPTXG7A1RB8VZ0GM9SAQEKWHHYZ95MCNMGSM75P6",
+  "vaultId": "fe0210f978e2e9ac46a0ab186cfc0b02315fe3032796111e640126985b216e33",
+  "keyCommitment": "1d5bbc1465222c7e03ba125a3255ffe810a2fcba992caecbe94f415b3443f650",
+  "nextKey": "5446aaa38932ba1282efab0b0c3f0a76bec635d71d67a2f56dc059b7fce8affd",
+  "digest": "acf6fd5dbf73bc707b0fe045061ed386f024486f71034862c0584a40109c31a0",
+  "sources": {
+    "pq-verifier-trait": {
+      "sha256": "a135d9a13766aa5a26aa12ce165c181c25b5ae6dd75c1f5fd4a7af553aa97bde",
+      "code": ";; A signature check the vault can call.\n;;\n;; `key` is the 32-byte commitment the vault stores, `digest` is the 32-byte\n;; message, and `sig` is the signature as 32-byte words. A verifier returns\n;; (ok true) for a valid signature and (ok false) for anything else.\n;;\n;; 1024 words is room for the schemes we expect to add: WOTS+ uses 68, Lamport\n;; uses 512, and SLH-DSA-SHA2-256s would use 931.\n\n(define-trait pq-verifier\n  ((verify ((buff 32) (buff 32) (list 1024 (buff 32))) (response bool uint))))\n"
+    },
+    "lamport": {
+      "sha256": "6ba17e17fd5aa8e76a2750c875bf3b4a6ef80dfb607b578ea0623dcab1a6f3ae",
+      "code": ";; Lamport verification over SHA-256, as in the 1979 paper. One-time: a key\n;; must sign one digest only.\n;;\n;; A key pair is 256 pairs of 32-byte secrets, one pair per bit of the digest.\n;;\n;;   pub_i_b = SHA256(secret_i_b)                                  b = 0, 1\n;;   H_0 = 32 zero bytes,  H_(i+1) = SHA256(H_i || pub_i_0 || pub_i_1),  key = H_256\n;;\n;; The key folds the pairs into a running hash because building one 16 KB\n;; buffer costs about ten times more in Clarity than 256 short hashes.\n;;\n;; To sign, the owner reveals secret_i_b for each bit b of the digest, most\n;; significant bit first.\n;;\n;; A signature is 512 words: the 256 revealed secrets, then the hash of each\n;; secret that stays hidden, so the verifier can rebuild `key`.\n\n(impl-trait .pq-verifier-trait.pq-verifier)\n\n(define-private (is-word (x (buff 32)) (acc bool))\n  (and acc (is-eq (len x) u32)))\n\n(define-private (bits (b (buff 1)) (acc (list 256 bool)))\n  (let ((v (buff-to-uint-be b)))\n    (unwrap-panic (as-max-len? (concat acc (list\n      (> (bit-and v u128) u0) (> (bit-and v u64) u0) (> (bit-and v u32) u0) (> (bit-and v u16) u0)\n      (> (bit-and v u8) u0) (> (bit-and v u4) u0) (> (bit-and v u2) u0) (> (bit-and v u1) u0))) u256))))\n\n;; Both hashes of pair i, in order: the revealed side is recomputed and the\n;; hidden side is taken from the signature.\n(define-private (pair (secret (buff 32)) (other (buff 32)) (bit bool))\n  (if bit (concat other (sha256 secret)) (concat (sha256 secret) other)))\n\n(define-private (join (p (buff 64)) (acc (buff 32)))\n  (sha256 (concat acc p)))\n\n(define-read-only (check (key (buff 32)) (digest (buff 32)) (sig (list 1024 (buff 32))))\n  (let ((secrets (unwrap! (slice? sig u0 u256) false))\n        (others (unwrap! (slice? sig u256 u512) false)))\n    (and\n      (is-eq (len sig) u512)\n      (is-eq (len digest) u32)\n      (fold is-word sig true)\n      (is-eq key (fold join (map pair secrets others (fold bits digest (list)))\n        0x0000000000000000000000000000000000000000000000000000000000000000)))))\n\n(define-public (verify (key (buff 32)) (digest (buff 32)) (sig (list 1024 (buff 32))))\n  (ok (check key digest sig)))\n"
+    },
+    "pq-vault": {
+      "sha256": "649c1fc83b8d50463c93efff5f40f7fc223277df99357eb29d3033e0bb8df2f6",
+      "code": ";; Mainnet candidate: sBTC calls are fixed to the official deployed token.\n;; Derived from the testnet prototype; no deployment has occurred.\n;; A vault for STX and sBTC. A withdrawal needs a hash-based one-time\n;; signature, and nothing else: the account that submits the transaction has\n;; no say over where the funds go.\n;;\n;; Each vault stores a 32-byte key and the verifier contract that checks\n;; signatures against it. A vault's id is the hash of its first key and its\n;; verifier, so nobody can open a look-alike under the id a depositor expects.\n;;\n;; A withdrawal is signed over this contract, the chain, the vault, its nonce,\n;; the asset, the amount, the recipient and the key that takes over next. Once\n;; it succeeds the old key is gone, so the same signature cannot be used again.\n;;\n;; There is no owner, admin or upgrade path. Whoever can sign for a vault's\n;; current key controls it.\n\n(use-trait pq-verifier .pq-verifier-trait.pq-verifier)\n\n(define-constant ERR-NO-VAULT (err u200))\n(define-constant ERR-KEY (err u201))\n(define-constant ERR-VERIFIER (err u202))\n(define-constant ERR-NONCE (err u203))\n(define-constant ERR-BALANCE (err u204))\n(define-constant ERR-SIGNATURE (err u205))\n(define-constant ERR-EXISTS (err u206))\n\n(define-map vaults (buff 32)\n  {key: (buff 32), verifier: principal, nonce: uint, stx: uint, sbtc: uint})\n\n(define-read-only (get-vault (id (buff 32)))\n  (map-get? vaults id))\n\n;; The id of the vault opened under `key` and checked by `verifier`.\n(define-read-only (vault-id (key (buff 32)) (verifier principal))\n  (sha256 (unwrap-panic (to-consensus-buff? {key: key, verifier: verifier}))))\n\n;; What the owner signs. `nonce` is the vault's current nonce.\n(define-read-only (withdrawal-digest\n    (id (buff 32)) (nonce uint) (asset (string-ascii 4)) (amount uint) (recipient principal) (next-key (buff 32)))\n  (sha256 (unwrap-panic (to-consensus-buff?\n    {vault: current-contract, chain: chain-id, id: id, nonce: nonce,\n     asset: asset, amount: amount, recipient: recipient, next-key: next-key}))))\n\n;; Open a vault under `key`, checked by `verifier` for the vault's lifetime.\n;; A key and verifier can open one vault, once.\n(define-public (open (key (buff 32)) (verifier <pq-verifier>))\n  (let ((id (vault-id key (contract-of verifier))))\n    (asserts! (is-eq (len key) u32) ERR-KEY)\n    (asserts! (map-insert vaults id {key: key, verifier: (contract-of verifier), nonce: u0, stx: u0, sbtc: u0}) ERR-EXISTS)\n    (print {event: \"open\", id: id, key: key, verifier: (contract-of verifier)})\n    (ok id)))\n\n;; Anyone can deposit into any vault.\n(define-public (deposit-stx (id (buff 32)) (amount uint))\n  (let ((vault (unwrap! (map-get? vaults id) ERR-NO-VAULT)))\n    (try! (stx-transfer? amount tx-sender current-contract))\n    (map-set vaults id (merge vault {stx: (+ (get stx vault) amount)}))\n    (print {event: \"deposit\", id: id, asset: \"stx\", amount: amount})\n    (ok true)))\n\n(define-public (deposit-sbtc (id (buff 32)) (amount uint))\n  (let ((vault (unwrap! (map-get? vaults id) ERR-NO-VAULT)))\n    (try! (contract-call? 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token transfer amount tx-sender current-contract none))\n    (map-set vaults id (merge vault {sbtc: (+ (get sbtc vault) amount)}))\n    (print {event: \"deposit\", id: id, asset: \"sbtc\", amount: amount})\n    (ok true)))\n\n;; Check a withdrawal, debit the vault and install the next key.\n;;\n;; The cheap checks run first because the signature check is the expensive\n;; step, so a replayed request fails on its nonce before any hashing.\n;;\n;; The vault's new state is written before the verifier runs, so a verifier\n;; that calls back into this contract sees it. A refused signature fails the\n;; transaction and undoes the write.\n;;\n;; The verifier runs as this contract with no allowances. It has none of the\n;; submitter's authority and cannot move this contract's assets.\n(define-private (spend\n    (id (buff 32)) (nonce uint) (asset (string-ascii 4)) (amount uint) (recipient principal)\n    (next-key (buff 32)) (verifier <pq-verifier>) (sig (list 1024 (buff 32))))\n  (let ((vault (unwrap! (map-get? vaults id) ERR-NO-VAULT))\n        (key (get key vault))\n        (is-stx (is-eq asset \"stx\"))\n        (balance (if is-stx (get stx vault) (get sbtc vault))))\n    (asserts! (is-eq (contract-of verifier) (get verifier vault)) ERR-VERIFIER)\n    (asserts! (is-eq nonce (get nonce vault)) ERR-NONCE)\n    (asserts! (and (is-eq (len next-key) u32) (not (is-eq next-key key))) ERR-KEY)\n    (asserts! (and (> amount u0) (<= amount balance)) ERR-BALANCE)\n    (map-set vaults id (merge vault {\n      key: next-key,\n      nonce: (+ nonce u1),\n      stx: (if is-stx (- balance amount) (get stx vault)),\n      sbtc: (if is-stx (get sbtc vault) (- balance amount))}))\n    (asserts!\n      (unwrap! (as-contract? ()\n        (unwrap! (contract-call? verifier verify key\n          (withdrawal-digest id nonce asset amount recipient next-key) sig) ERR-SIGNATURE))\n        ERR-SIGNATURE)\n      ERR-SIGNATURE)\n    (print {event: \"withdraw\", id: id, nonce: nonce, asset: asset, amount: amount,\n            recipient: recipient, next-key: next-key})\n    (ok true)))\n\n;; Anyone can submit a signed withdrawal. The funds go to the recipient the\n;; owner signed for.\n(define-public (withdraw-stx\n    (id (buff 32)) (nonce uint) (amount uint) (recipient principal) (next-key (buff 32))\n    (verifier <pq-verifier>) (sig (list 1024 (buff 32))))\n  (begin\n    (try! (spend id nonce \"stx\" amount recipient next-key verifier sig))\n    (as-contract? ((with-stx amount)) (try! (stx-transfer? amount tx-sender recipient)))))\n\n(define-public (withdraw-sbtc\n    (id (buff 32)) (nonce uint) (amount uint) (recipient principal) (next-key (buff 32))\n    (verifier <pq-verifier>) (sig (list 1024 (buff 32))))\n  (begin\n    (try! (spend id nonce \"sbtc\" amount recipient next-key verifier sig))\n    (contract-call? 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token transfer amount current-contract recipient none)))\n"
+    }
+  },
+  "tokenSourceHashes": {
+    "sbtc-token": "8f0a0edd55fa25613aac50769cf18a671227333850950d4f7f1f913ea0a9c8d1",
+    "sbtc-registry": "8ee2578ad301048a7970489357cc04e322d888e594f01e6ee218a29c2c97289d"
+  },
+  "reviewedFiles": {
+    "contracts/pq-verifier-trait.clar": "a135d9a13766aa5a26aa12ce165c181c25b5ae6dd75c1f5fd4a7af553aa97bde",
+    "contracts/lamport.clar": "6ba17e17fd5aa8e76a2750c875bf3b4a6ef80dfb607b578ea0623dcab1a6f3ae",
+    "contracts/pq-vault.clar": "649c1fc83b8d50463c93efff5f40f7fc223277df99357eb29d3033e0bb8df2f6",
+    "execution.mjs": "e194f3463956474e60b7344ba82f8bb0d51e21d10b6bd0babf3c69cd2078f030",
+    "mainnet-api.mjs": "53dcb633ab730580c541b6c7826088a62ec186b4a823e2236f62eec899b03f9a",
+    "execute.mjs": "449a7e8dc3f17f70ec74d358032060ff300377edc8c248af4fdc5ad94f995836",
+    "accounts.mjs": "7d28830ce1d9c8208262dd529aeddabc50aab37f0e72d90f2230c8deecfeedf9",
+    "candidate.mjs": "371682a59c36c48d8eaff1eb24d09ba6eeac0d77ba1e4b77ec62e277b84a7c3c",
+    "tools/keychain.swift": "fc77910c4edcd32e88529607a1c7034784a511393805c1267ad54e03ecf74ed6",
+    "verify-candidate.mjs": "82aef9b16cf5795a03dcfe4050f3360c6fee0eeaf1bd182299cf0b18120eadd0"
+  },
+  "libraryPins": {
+    "vault.mjs": "2d35356cceec2c6f01d5ac89c863678be56d956a1d5990f24e447895a8ace8f1",
+    "journal.mjs": "b080b48760f7afbcfa2274da21bb63aaa810d77681871db2f173489ca8b0ddb6",
+    "lamport.mjs": "8185451e1c83f74e59f0f25af842989c26ea48c6f08cdbc7ac238fad39e8bb75",
+    "wots.mjs": "dbdc1b90d1da497931e77e0de48f985c6b9811a3d8653c49d06e1de3ba3e9c43"
+  },
+  "dependenciesLockSha256": "0f30c71d37f318bf89e446c3b22c8c53fc0a62afba4f7324a8afa4dedf5e8ced",
+  "keychainHelperSha256": "5cb6dadcefefb841a9c5ae08ae11ad0167b91dd330971446fd18154b33321c9b",
+  "preparedAt": "2026-10-15T21:09:46.373Z",
+  "reviewStatus": "Candidate prepared for Leah's deeper review; no deployment or withdrawal signed by this preparation."
+}

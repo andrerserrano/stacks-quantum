@@ -6,3 +6,12 @@ docs/
 # The hosted copy of the demo page, and its link to the Vercel project.
 site/.share/
 /session/
+# Local wallet custody and signing history must never be committed.
+accounts.public.json
+execution.json
+authorization.json
+initialized.json
+executor.lock/
+journal/
+# Integration tests write a fresh local report; the dated evidence is kept separately.
+/mainnet/snapshot/mainnet/evidence/integration-results.json
