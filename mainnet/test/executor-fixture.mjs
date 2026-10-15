@@ -97,4 +97,3 @@ export function fixture() {
   async function prefix(count){for(let i=0;i<count;i++){const r=await e.advance();assert.equal(r.status,'broadcast');mine();}}
   return {root,c,keys,owner,chain,api,e,make,mine,prefix,secretReads:()=>secretReads,cleanup:()=>rmSync(root,{recursive:true,force:true})};
 }
-

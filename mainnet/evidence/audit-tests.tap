@@ -1207,33 +1207,33 @@ ok 199 - frozen read transport propagates timeout uncertainty
 # --------------------------------------------------------------------------------------------
 # file                          | line % | branch % | funcs % | uncovered lines
 # --------------------------------------------------------------------------------------------
-# mainnet                       |        |          |         | 
-#  snapshot                     |        |          |         | 
-#   mainnet                     |        |          |         | 
-#    execution.mjs              | 100.00 |    98.33 |  100.00 | 
+# mainnet                       |        |          |         |
+#  snapshot                     |        |          |         |
+#   mainnet                     |        |          |         |
+#    execution.mjs              | 100.00 |    98.33 |  100.00 |
 #    execution.test.mjs         |  99.67 |    97.01 |  100.00 | 47
-#    integration.test.mjs       | 100.00 |    92.86 |  100.00 | 
+#    integration.test.mjs       | 100.00 |    92.86 |  100.00 |
 #    mainnet-api.mjs            |  98.68 |    90.91 |   93.75 | 44
-#    mainnet-api.test.mjs       | 100.00 |   100.00 |  100.00 | 
-#   source                      |        |          |         | 
-#    vault                      |        |          |         | 
-#     src                       |        |          |         | 
+#    mainnet-api.test.mjs       | 100.00 |   100.00 |  100.00 |
+#   source                      |        |          |         |
+#    vault                      |        |          |         |
+#     src                       |        |          |         |
 #      journal.mjs              |  97.44 |    90.00 |   75.00 | 21-22
-#      lamport.mjs              | 100.00 |    94.12 |  100.00 | 
-#      vault.mjs                | 100.00 |    64.52 |   93.33 | 
+#      lamport.mjs              | 100.00 |    94.12 |  100.00 |
+#      vault.mjs                | 100.00 |    64.52 |   93.33 |
 #      wots.mjs                 |  63.33 |   100.00 |    0.00 | 19-22 30-35 42-45 48-50 53-57
-#  test                         |        |          |         | 
-#   clarity-edges.test.mjs      | 100.00 |   100.00 |  100.00 | 
+#  test                         |        |          |         |
+#   clarity-edges.test.mjs      | 100.00 |   100.00 |  100.00 |
 #   clarity-fixture.mjs         |  97.26 |    92.86 |   90.00 | 46-47
-#   evidence.test.mjs           | 100.00 |    97.30 |  100.00 | 
-#   executor-edges.test.mjs     | 100.00 |   100.00 |  100.00 | 
+#   evidence.test.mjs           | 100.00 |    97.30 |  100.00 |
+#   executor-edges.test.mjs     | 100.00 |   100.00 |  100.00 |
 #   executor-fixture.mjs        |  99.00 |    84.21 |  100.00 | 48
-#   journal-race.test.mjs       | 100.00 |   100.00 |  100.00 | 
-#   public-verifier.test.mjs    | 100.00 |   100.00 |   97.33 | 
-#   transport-edges.test.mjs    | 100.00 |   100.00 |  100.00 | 
+#   journal-race.test.mjs       | 100.00 |   100.00 |  100.00 |
+#   public-verifier.test.mjs    | 100.00 |   100.00 |   97.33 |
+#   transport-edges.test.mjs    | 100.00 |   100.00 |  100.00 |
 #  verify-mainnet.mjs           |  93.88 |    94.29 |   94.12 | 40 140-147
-#  verify-snapshot.mjs          | 100.00 |    98.04 |  100.00 | 
+#  verify-snapshot.mjs          | 100.00 |    98.04 |  100.00 |
 # --------------------------------------------------------------------------------------------
-# all files                     |  98.28 |    95.90 |   96.53 | 
+# all files                     |  98.28 |    95.90 |   96.53 |
 # --------------------------------------------------------------------------------------------
 # end of coverage report
