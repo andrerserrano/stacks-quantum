@@ -1,0 +1,17 @@
+{
+  "name": "pq-vault",
+  "private": true,
+  "type": "module",
+  "description": "A Clarity vault whose withdrawals need a hash-based one-time signature. Proof of concept.",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "measure": "node measure.mjs",
+    "mutate": "node mutate.mjs",
+    "demo": "node demo.mjs",
+    "rehearse": "node testnet.mjs"
+  },
+  "devDependencies": {
+    "@stacks/clarinet-sdk": "3.24.1",
+    "@stacks/transactions": "^7.0.0"
+  }
+}

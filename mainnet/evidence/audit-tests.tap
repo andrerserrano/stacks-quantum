@@ -1,0 +1,1239 @@
+TAP version 13
+# Subtest: seven mainnet transactions: real SDK signatures, independent carrier, canonical evidence and one durable Lamport claim
+ok 1 - seven mainnet transactions: real SDK signatures, independent carrier, canonical evidence and one durable Lamport claim
+  ---
+  duration_ms: 714.23875
+  type: 'test'
+  ...
+# Subtest: unfunded operator cannot access custody, initialize a journal, sign or broadcast
+ok 2 - unfunded operator cannot access custody, initialize a journal, sign or broadcast
+  ---
+  duration_ms: 25.180708
+  type: 'test'
+  ...
+# Subtest: operator sBTC funding is required before spending the first deployment fee
+ok 3 - operator sBTC funding is required before spending the first deployment fee
+  ---
+  duration_ms: 29.153334
+  type: 'test'
+  ...
+# Subtest: wrong network stops before custody access
+ok 4 - wrong network stops before custody access
+  ---
+  duration_ms: 23.131625
+  type: 'test'
+  ...
+# Subtest: fee above the whole cap stops before any signature
+ok 5 - fee above the whole cap stops before any signature
+  ---
+  duration_ms: 34.819459
+  type: 'test'
+  ...
+# Subtest: fee cap includes every previously signed transaction, not just the next fee
+ok 6 - fee cap includes every previously signed transaction, not just the next fee
+  ---
+  duration_ms: 238.8845
+  type: 'test'
+  ...
+# Subtest: initial preflight is read-only and uses explicit first-call bids without claiming any key
+ok 7 - initial preflight is read-only and uses explicit first-call bids without claiming any key
+  ---
+  duration_ms: 12.577167
+  type: 'test'
+  ...
+# Subtest: missing withdrawal fee quote never claims the one-time key
+ok 8 - missing withdrawal fee quote never claims the one-time key
+  ---
+  duration_ms: 417.849583
+  type: 'test'
+  ...
+# Subtest: wrong on-chain mainnet digest never claims the one-time key
+ok 9 - wrong on-chain mainnet digest never claims the one-time key
+  ---
+  duration_ms: 396.271208
+  type: 'test'
+  ...
+# Subtest: lost reply after acceptance reconciles the existing pending tx without another signature
+ok 10 - lost reply after acceptance reconciles the existing pending tx without another signature
+  ---
+  duration_ms: 101.434917
+  type: 'test'
+  ...
+# Subtest: lost reply before acceptance rebroadcasts exactly the saved bytes without custody access
+ok 11 - lost reply before acceptance rebroadcasts exactly the saved bytes without custody access
+  ---
+  duration_ms: 96.405958
+  type: 'test'
+  ...
+# Subtest: dropped transaction is retried as the same transaction, with the same fee reservation
+ok 12 - dropped transaction is retried as the same transaction, with the same fee reservation
+  ---
+  duration_ms: 102.051541
+  type: 'test'
+  ...
+# Subtest: a consumed account nonce with an unknown transaction stops rebroadcast
+ok 13 - a consumed account nonce with an unknown transaction stops rebroadcast
+  ---
+  duration_ms: 87.671958
+  type: 'test'
+  ...
+# Subtest: success with too few canonical confirmations cannot advance
+ok 14 - success with too few canonical confirmations cannot advance
+  ---
+  duration_ms: 88.610792
+  type: 'test'
+  ...
+# Subtest: a predecessor reorganization stops all subsequent signing
+ok 15 - a predecessor reorganization stops all subsequent signing
+  ---
+  duration_ms: 146.391959
+  type: 'test'
+  ...
+# Subtest: post-condition abort consumes a counted fee but cannot be mistaken for payout or rotate the Lamport key
+ok 16 - post-condition abort consumes a counted fee but cannot be mistaken for payout or rotate the Lamport key
+  ---
+  duration_ms: 596.506792
+  type: 'test'
+  ...
+# Subtest: a modified stored payload is rejected even if its signature, txid and local wire hash were recomputed
+ok 17 - a modified stored payload is rejected even if its signature, txid and local wire hash were recomputed
+  ---
+  duration_ms: 130.566375
+  type: 'test'
+  ...
+# Subtest: mempool conflicts stop before custody access
+ok 18 - mempool conflicts stop before custody access
+  ---
+  duration_ms: 18.644833
+  type: 'test'
+  ...
+# Subtest: a deployed source mismatch stops before funding or subsequent deployment
+ok 19 - a deployed source mismatch stops before funding or subsequent deployment
+  ---
+  duration_ms: 105.700166
+  type: 'test'
+  ...
+# Subtest: wrong token-transfer event cannot satisfy deposit evidence
+ok 20 - wrong token-transfer event cannot satisfy deposit evidence
+  ---
+  duration_ms: 337.316292
+  type: 'test'
+  ...
+# Subtest: an inconsistent actual token balance and internal ledger stop before deposit
+ok 21 - an inconsistent actual token balance and internal ledger stop before deposit
+  ---
+  duration_ms: 262.24425
+  type: 'test'
+  ...
+# Subtest: missing journal after initialization fails closed instead of creating an empty signer history
+ok 22 - missing journal after initialization fails closed instead of creating an empty signer history
+  ---
+  duration_ms: 70.602417
+  type: 'test'
+  ...
+# Subtest: missing state with a surviving initialization marker requires recovery
+ok 23 - missing state with a surviving initialization marker requires recovery
+  ---
+  duration_ms: 111.835375
+  type: 'test'
+  ...
+# Subtest: a second executor cannot run while the single-writer lock exists
+ok 24 - a second executor cannot run while the single-writer lock exists
+  ---
+  duration_ms: 6.572667
+  type: 'test'
+  ...
+# Subtest: persistent claim for a different digest prevents Lamport signing
+ok 25 - persistent claim for a different digest prevents Lamport signing
+  ---
+  duration_ms: 446.982875
+  type: 'test'
+  ...
+# Subtest: withdrawal retry preserves the exact saved Lamport authorization and ordinary signed bytes
+ok 26 - withdrawal retry preserves the exact saved Lamport authorization and ordinary signed bytes
+  ---
+  duration_ms: 533.21975
+  type: 'test'
+  ...
+# Subtest: fee too large for the submitter reserve stops before the operator sends its top-up
+ok 27 - fee too large for the submitter reserve stops before the operator sends its top-up
+  ---
+  duration_ms: 345.368083
+  type: 'test'
+  ...
+# Subtest: only NoEstimateAvailable enables the exact reviewed first-call bids, all counted against the cap
+ok 28 - only NoEstimateAvailable enables the exact reviewed first-call bids, all counted against the cap
+  ---
+  duration_ms: 565.328958
+  type: 'test'
+  ...
+# Subtest: a deployment without an estimate cannot borrow a first-call fee policy
+ok 29 - a deployment without an estimate cannot borrow a first-call fee policy
+  ---
+  duration_ms: 23.342417
+  type: 'test'
+  ...
+# Subtest: lost authorization file stops a withdrawal retry without another signature
+ok 30 - lost authorization file stops a withdrawal retry without another signature
+  ---
+  duration_ms: 459.246708
+  type: 'test'
+  ...
+# Subtest: lost journal claim stops a withdrawal retry without replacing signing history
+ok 31 - lost journal claim stops a withdrawal retry without replacing signing history
+  ---
+  duration_ms: 456.861292
+  type: 'test'
+  ...
+# Subtest: a transaction whose block hash no longer matches the canonical block cannot advance
+ok 32 - a transaction whose block hash no longer matches the canonical block cannot advance
+  ---
+  duration_ms: 88.664625
+  type: 'test'
+  ...
+# Subtest: an unanchored receipt cannot satisfy the confirmation policy
+ok 33 - an unanchored receipt cannot satisfy the confirmation policy
+  ---
+  duration_ms: 84.91875
+  type: 'test'
+  ...
+# Subtest: a wrong token asset in the withdrawal event cannot mark the demo complete
+ok 34 - a wrong token asset in the withdrawal event cannot mark the demo complete
+  ---
+  duration_ms: 472.30675
+  type: 'test'
+  ...
+# Subtest: recipient balance evidence must independently agree with the payout event
+ok 35 - recipient balance evidence must independently agree with the payout event
+  ---
+  duration_ms: 491.851
+  type: 'test'
+  ...
+# Subtest: deployed sBTC code: Lamport payout, tampering, replay, key state and persistent signer guard
+ok 36 - deployed sBTC code: Lamport payout, tampering, replay, key state and persistent signer guard
+  ---
+  duration_ms: 388.262084
+  type: 'test'
+  ...
+# Subtest: vault fails closed when its pinned verifier returns (ok false)
+ok 37 - vault fails closed when its pinned verifier returns (ok false)
+  ---
+  duration_ms: 195.511833
+  type: 'test'
+  ...
+# Subtest: vault fails closed when its pinned verifier returns (err u777)
+ok 38 - vault fails closed when its pinned verifier returns (err u777)
+  ---
+  duration_ms: 215.559875
+  type: 'test'
+  ...
+# Subtest: sBTC transfer failure rolls back vault balance, nonce and key
+ok 39 - sBTC transfer failure rolls back vault balance, nonce and key
+  ---
+  duration_ms: 214.386667
+  type: 'test'
+  ...
+# Subtest: only the node NoEstimateAvailable error is exposed as an explicit first-call fee case
+ok 40 - only the node NoEstimateAvailable error is exposed as an explicit first-call fee case
+  ---
+  duration_ms: 40.733833
+  type: 'test'
+  ...
+# Subtest: fee database errors are never converted into a first-call bid
+ok 41 - fee database errors are never converted into a first-call bid
+  ---
+  duration_ms: 1.168
+  type: 'test'
+  ...
+# Subtest: token read-only transport decodes the response and uses the fixed mainnet endpoint
+ok 42 - token read-only transport decodes the response and uses the fixed mainnet endpoint
+  ---
+  duration_ms: 0.957834
+  type: 'test'
+  ...
+# Subtest: account transport subtracts locked STX and checks independent nonce views
+ok 43 - account transport subtracts locked STX and checks independent nonce views
+  ---
+  duration_ms: 0.4215
+  type: 'test'
+  ...
+# Subtest: inconsistent account nonce views stop instead of selecting a nonce from one index
+ok 44 - inconsistent account nonce views stop instead of selecting a nonce from one index
+  ---
+  duration_ms: 0.274417
+  type: 'test'
+  ...
+# Subtest: partial paginated transfer evidence cannot pass verification
+ok 45 - partial paginated transfer evidence cannot pass verification
+  ---
+  duration_ms: 0.205333
+  type: 'test'
+  ...
+# Subtest: missing transactions and missing contract sources are explicit null responses
+ok 46 - missing transactions and missing contract sources are explicit null responses
+  ---
+  duration_ms: 0.127459
+  type: 'test'
+  ...
+# Subtest: read-only 429 responses are retried with a bounded cooldown
+ok 47 - read-only 429 responses are retried with a bounded cooldown
+  ---
+  duration_ms: 0.338625
+  type: 'test'
+  ...
+# Subtest: broadcast 429 responses are not retried by the transport
+ok 48 - broadcast 429 responses are not retried by the transport
+  ---
+  duration_ms: 0.223209
+  type: 'test'
+  ...
+# Error: Runtime error while interpreting SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.pq-vault
+# Subtest: official-token vault rejects all malformed Lamport lengths with contract errors and rollback
+ok 49 - official-token vault rejects all malformed Lamport lengths with contract errors and rollback
+  ---
+  duration_ms: 395.317125
+  type: 'test'
+  ...
+# Subtest: official-token vault checks missing ID, nonce, verifier, successor and balance boundaries
+ok 50 - official-token vault checks missing ID, nonce, verifier, successor and balance boundaries
+  ---
+  duration_ms: 233.44
+  type: 'test'
+  ...
+# Subtest: wrong-chain, wrong-contract and wrong-asset signatures cannot pay official sBTC
+ok 51 - wrong-chain, wrong-contract and wrong-asset signatures cannot pay official sBTC
+  ---
+  duration_ms: 243.635083
+  type: 'test'
+  ...
+# Subtest: failed operator token deposit cannot credit a ledger or change a key
+ok 52 - failed operator token deposit cannot credit a ledger or change a key
+  ---
+  duration_ms: 197.820083
+  type: 'test'
+  ...
+# Subtest: known limits: direct transfers bypass the ledger, retirement does not close the contract
+ok 53 - known limits: direct transfers bypass the ledger, retirement does not close the contract
+  ---
+  duration_ms: 240.67125
+  type: 'test'
+  ...
+# Subtest: Appendix A: independently reconstruct every Lamport pair, bit and commitment; verify Clarity
+ok 54 - Appendix A: independently reconstruct every Lamport pair, bit and commitment; verify Clarity
+  ---
+  duration_ms: 2050.284042
+  type: 'test'
+  ...
+# Subtest: published source and historical evidence pass offline verification
+ok 55 - published source and historical evidence pass offline verification
+  ---
+  duration_ms: 11.397
+  type: 'test'
+  ...
+# Subtest: offline checker detects changed snapshot/mainnet/execution.mjs
+ok 56 - offline checker detects changed snapshot/mainnet/execution.mjs
+  ---
+  duration_ms: 0.969125
+  type: 'test'
+  ...
+# Subtest: offline checker detects changed snapshot/mainnet/contracts/lamport.clar
+ok 57 - offline checker detects changed snapshot/mainnet/contracts/lamport.clar
+  ---
+  duration_ms: 0.263667
+  type: 'test'
+  ...
+# Subtest: offline checker detects changed snapshot/source/vault/src/journal.mjs
+ok 58 - offline checker detects changed snapshot/source/vault/src/journal.mjs
+  ---
+  duration_ms: 0.939958
+  type: 'test'
+  ...
+# Subtest: offline checker detects changed snapshot/source/vault/package-lock.json
+ok 59 - offline checker detects changed snapshot/source/vault/package-lock.json
+  ---
+  duration_ms: 0.84875
+  type: 'test'
+  ...
+# Subtest: offline checker detects changed snapshot/mainnet/evidence/sbtc-token.deployed.clar
+ok 60 - offline checker detects changed snapshot/mainnet/evidence/sbtc-token.deployed.clar
+  ---
+  duration_ms: 0.657125
+  type: 'test'
+  ...
+# Subtest: offline checker detects changed snapshot/mainnet/candidate/manifest.json
+ok 61 - offline checker detects changed snapshot/mainnet/candidate/manifest.json
+  ---
+  duration_ms: 0.098167
+  type: 'test'
+  ...
+# Subtest: rewriting both execution evidence and its audit hash cannot silently change the historical record
+ok 62 - rewriting both execution evidence and its audit hash cannot silently change the historical record
+  ---
+  duration_ms: 3.2365
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects duplicateTx
+ok 63 - historical evidence rejects duplicateTx
+  ---
+  duration_ms: 0.159584
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects sender
+ok 64 - historical evidence rejects sender
+  ---
+  duration_ms: 0.167542
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects nonce
+ok 65 - historical evidence rejects nonce
+  ---
+  duration_ms: 0.105292
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects result
+ok 66 - historical evidence rejects result
+  ---
+  duration_ms: 0.089167
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects negativeFee
+ok 67 - historical evidence rejects negativeFee
+  ---
+  duration_ms: 0.096792
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects fractionalFee
+ok 68 - historical evidence rejects fractionalFee
+  ---
+  duration_ms: 0.0745
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects feeTotal
+ok 69 - historical evidence rejects feeTotal
+  ---
+  duration_ms: 0.106334
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects confirmationCount
+ok 70 - historical evidence rejects confirmationCount
+  ---
+  duration_ms: 2.328
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects confirmationSpacing
+ok 71 - historical evidence rejects confirmationSpacing
+  ---
+  duration_ms: 0.120167
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects depositRecipient
+ok 72 - historical evidence rejects depositRecipient
+  ---
+  duration_ms: 0.11325
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects topupAmount
+ok 73 - historical evidence rejects topupAmount
+  ---
+  duration_ms: 0.097875
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects duplicatePayout
+ok 74 - historical evidence rejects duplicatePayout
+  ---
+  duration_ms: 0.099958
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects wrongAsset
+ok 75 - historical evidence rejects wrongAsset
+  ---
+  duration_ms: 0.10025
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects wrongFinalVerifier
+ok 76 - historical evidence rejects wrongFinalVerifier
+  ---
+  duration_ms: 2.285416
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects unexpectedStx
+ok 77 - historical evidence rejects unexpectedStx
+  ---
+  duration_ms: 0.135375
+  type: 'test'
+  ...
+# Subtest: historical evidence rejects recipientIncrease
+ok 78 - historical evidence rejects recipientIncrease
+  ---
+  duration_ms: 0.11
+  type: 'test'
+  ...
+# Subtest: missing completion assertions and unfinished work cannot pass the audit
+ok 79 - missing completion assertions and unfinished work cannot pass the audit
+  ---
+  duration_ms: 0.392333
+  type: 'test'
+  ...
+# Subtest: candidate rejects testnet
+ok 80 - candidate rejects testnet
+  ---
+  duration_ms: 53.753375
+  type: 'test'
+  ...
+# Subtest: candidate rejects amount
+ok 81 - candidate rejects amount
+  ---
+  duration_ms: 10.582542
+  type: 'test'
+  ...
+# Subtest: candidate rejects token
+ok 82 - candidate rejects token
+  ---
+  duration_ms: 9.197958
+  type: 'test'
+  ...
+# Subtest: candidate rejects priority
+ok 83 - candidate rejects priority
+  ---
+  duration_ms: 10.687
+  type: 'test'
+  ...
+# Subtest: candidate rejects cap
+ok 84 - candidate rejects cap
+  ---
+  duration_ms: 8.104375
+  type: 'test'
+  ...
+# Subtest: candidate rejects confirmations
+ok 85 - candidate rejects confirmations
+  ---
+  duration_ms: 7.890666
+  type: 'test'
+  ...
+# Subtest: candidate rejects reserve
+ok 86 - candidate rejects reserve
+  ---
+  duration_ms: 7.832584
+  type: 'test'
+  ...
+# Subtest: candidate rejects bids
+ok 87 - candidate rejects bids
+  ---
+  duration_ms: 9.309459
+  type: 'test'
+  ...
+# Subtest: candidate rejects duplicateAccount
+ok 88 - candidate rejects duplicateAccount
+  ---
+  duration_ms: 12.787291
+  type: 'test'
+  ...
+# Subtest: candidate rejects wrongPublicKey
+ok 89 - candidate rejects wrongPublicKey
+  ---
+  duration_ms: 8.055791
+  type: 'test'
+  ...
+# Subtest: candidate rejects negativeNonce
+ok 90 - candidate rejects negativeNonce
+  ---
+  duration_ms: 8.05825
+  type: 'test'
+  ...
+# Subtest: candidate rejects wrongVault
+ok 91 - candidate rejects wrongVault
+  ---
+  duration_ms: 7.245625
+  type: 'test'
+  ...
+# Subtest: candidate rejects wrongRecipient
+ok 92 - candidate rejects wrongRecipient
+  ---
+  duration_ms: 12.25525
+  type: 'test'
+  ...
+# Subtest: candidate rejects shortKey
+ok 93 - candidate rejects shortKey
+  ---
+  duration_ms: 17.694041
+  type: 'test'
+  ...
+# Subtest: candidate rejects reusedSuccessor
+ok 94 - candidate rejects reusedSuccessor
+  ---
+  duration_ms: 16.330042
+  type: 'test'
+  ...
+# Subtest: candidate rejects wrongId
+ok 95 - candidate rejects wrongId
+  ---
+  duration_ms: 10.665
+  type: 'test'
+  ...
+# Subtest: candidate rejects wrongDigest
+ok 96 - candidate rejects wrongDigest
+  ---
+  duration_ms: 10.265084
+  type: 'test'
+  ...
+# Subtest: candidate rejects extraDeployment
+ok 97 - candidate rejects extraDeployment
+  ---
+  duration_ms: 7.579458
+  type: 'test'
+  ...
+# Subtest: candidate rejects changedSource
+ok 98 - candidate rejects changedSource
+  ---
+  duration_ms: 9.373416
+  type: 'test'
+  ...
+# Subtest: candidate rejects missingTokenPin
+ok 99 - candidate rejects missingTokenPin
+  ---
+  duration_ms: 8.910625
+  type: 'test'
+  ...
+# Subtest: reviewed-file checks reject traversal and changed bytes
+ok 100 - reviewed-file checks reject traversal and changed bytes
+  ---
+  duration_ms: 55.19125
+  type: 'test'
+  ...
+# Subtest: unsigned stop: missing nonces
+ok 101 - unsigned stop: missing nonces
+  ---
+  duration_ms: 44.848834
+  type: 'test'
+  ...
+# Subtest: unsigned stop: changed token source
+ok 102 - unsigned stop: changed token source
+  ---
+  duration_ms: 21.679167
+  type: 'test'
+  ...
+# Subtest: unsigned stop: occupied contract
+ok 103 - unsigned stop: occupied contract
+  ---
+  duration_ms: 27.15875
+  type: 'test'
+  ...
+# Subtest: unsigned stop: insufficient agreed reserve
+ok 104 - unsigned stop: insufficient agreed reserve
+  ---
+  duration_ms: 34.26525
+  type: 'test'
+  ...
+# Subtest: unsigned stop: missing vault
+ok 105 - unsigned stop: missing vault
+  ---
+  duration_ms: 269.91675
+  type: 'test'
+  ...
+# Subtest: unsigned stop: wrong vault nonce
+ok 106 - unsigned stop: wrong vault nonce
+  ---
+  duration_ms: 256.650208
+  type: 'test'
+  ...
+# Subtest: unsigned stop: wrong vault key
+ok 107 - unsigned stop: wrong vault key
+  ---
+  duration_ms: 248.585125
+  type: 'test'
+  ...
+# Subtest: unsigned stop: insufficient operator tokens
+ok 108 - unsigned stop: insufficient operator tokens
+  ---
+  duration_ms: 286.133541
+  type: 'test'
+  ...
+# Subtest: unsigned stop: insufficient top-up principal
+ok 109 - unsigned stop: insufficient top-up principal
+  ---
+  duration_ms: 355.850542
+  type: 'test'
+  ...
+# Subtest: unsigned stop: insufficient submitter fee balance
+ok 110 - unsigned stop: insufficient submitter fee balance
+  ---
+  duration_ms: 382.095
+  type: 'test'
+  ...
+# Subtest: invalid fee quote rejected (0)
+ok 111 - invalid fee quote rejected (0)
+  ---
+  duration_ms: 33.68775
+  type: 'test'
+  ...
+# Subtest: invalid fee quote rejected (-1)
+ok 112 - invalid fee quote rejected (-1)
+  ---
+  duration_ms: 21.946458
+  type: 'test'
+  ...
+# Subtest: invalid fee quote rejected (1.5)
+ok 113 - invalid fee quote rejected (1.5)
+  ---
+  duration_ms: 20.159542
+  type: 'test'
+  ...
+# Subtest: invalid fee quote rejected (9007199254740992)
+ok 114 - invalid fee quote rejected (9007199254740992)
+  ---
+  duration_ms: 28.996084
+  type: 'test'
+  ...
+# Subtest: invalid fee quote rejected (1000)
+ok 115 - invalid fee quote rejected (1000)
+  ---
+  duration_ms: 27.545625
+  type: 'test'
+  ...
+# Subtest: invalid fee quote rejected (NaN)
+ok 116 - invalid fee quote rejected (NaN)
+  ---
+  duration_ms: 26.380375
+  type: 'test'
+  ...
+# Subtest: receipt refuses wrong transaction ID
+ok 117 - receipt refuses wrong transaction ID
+  ---
+  duration_ms: 89.482583
+  type: 'test'
+  ...
+# Subtest: receipt refuses wrong sender
+ok 118 - receipt refuses wrong sender
+  ---
+  duration_ms: 90.877583
+  type: 'test'
+  ...
+# Subtest: receipt refuses wrong nonce
+ok 119 - receipt refuses wrong nonce
+  ---
+  duration_ms: 96.083417
+  type: 'test'
+  ...
+# Subtest: receipt refuses wrong fee
+ok 120 - receipt refuses wrong fee
+  ---
+  duration_ms: 82.35475
+  type: 'test'
+  ...
+# Subtest: receipt refuses wrong result
+ok 121 - receipt refuses wrong result
+  ---
+  duration_ms: 92.376583
+  type: 'test'
+  ...
+# Subtest: receipt refuses noncanonical microblock
+ok 122 - receipt refuses noncanonical microblock
+  ---
+  duration_ms: 87.518375
+  type: 'test'
+  ...
+# Subtest: VM failure retains fee reservation and stops the sequence
+ok 123 - VM failure retains fee reservation and stops the sequence
+  ---
+  duration_ms: 103.384
+  type: 'test'
+  ...
+# Subtest: tampered saved candidateHash fails closed
+ok 124 - tampered saved candidateHash fails closed
+  ---
+  duration_ms: 81.193583
+  type: 'test'
+  ...
+# Subtest: tampered saved role fails closed
+ok 125 - tampered saved role fails closed
+  ---
+  duration_ms: 129.884334
+  type: 'test'
+  ...
+# Subtest: tampered saved nonce fails closed
+ok 126 - tampered saved nonce fails closed
+  ---
+  duration_ms: 115.76925
+  type: 'test'
+  ...
+# Subtest: tampered saved wireSha256 fails closed
+ok 127 - tampered saved wireSha256 fails closed
+  ---
+  duration_ms: 117.077458
+  type: 'test'
+  ...
+# Subtest: a surviving journal cannot be adopted into an untracked run
+ok 128 - a surviving journal cannot be adopted into an untracked run
+  ---
+  duration_ms: 24.706042
+  type: 'test'
+  ...
+# Subtest: crash after durable authorization, before outer transaction: reuse exact authorization
+ok 129 - crash after durable authorization, before outer transaction: reuse exact authorization
+  ---
+  duration_ms: 557.778333
+  type: 'test'
+  ...
+# Subtest: saved authorization refuses wrong digest before ordinary signing
+ok 130 - saved authorization refuses wrong digest before ordinary signing
+  ---
+  duration_ms: 476.547917
+  type: 'test'
+  ...
+# Subtest: saved authorization refuses invalid signature before ordinary signing
+ok 131 - saved authorization refuses invalid signature before ordinary signing
+  ---
+  duration_ms: 443.06175
+  type: 'test'
+  ...
+# Subtest: saved authorization refuses lost claim before ordinary signing
+ok 132 - saved authorization refuses lost claim before ordinary signing
+  ---
+  duration_ms: 409.137125
+  type: 'test'
+  ...
+# Subtest: custody master mismatch stops before claiming a one-time key
+ok 133 - custody master mismatch stops before claiming a one-time key
+  ---
+  duration_ms: 400.524958
+  type: 'test'
+  ...
+# Subtest: simultaneous executors share one exclusive writer lock
+ok 134 - simultaneous executors share one exclusive writer lock
+  ---
+  duration_ms: 76.025125
+  type: 'test'
+  ...
+# Subtest: crash after journal claim but before authorization can only resume that same digest
+ok 135 - crash after journal claim but before authorization can only resume that same digest
+  ---
+  duration_ms: 537.426833
+  type: 'test'
+  ...
+# Subtest: ordinary signing failure after Lamport persistence preserves authorization for recovery
+ok 136 - ordinary signing failure after Lamport persistence preserves authorization for recovery
+  ---
+  duration_ms: 544.69625
+  type: 'test'
+  ...
+# Subtest: lost withdrawal reply after acceptance never signs or broadcasts another instruction
+ok 137 - lost withdrawal reply after acceptance never signs or broadcasts another instruction
+  ---
+  duration_ms: 567.332625
+  type: 'test'
+  ...
+# Subtest: a wrong broadcast reply ID leaves durable state for reconciliation, not a new signature
+ok 138 - a wrong broadcast reply ID leaves durable state for reconciliation, not a new signature
+  ---
+  duration_ms: 72.529625
+  type: 'test'
+  ...
+# Subtest: exact 20 STX cumulative fee boundary succeeds without exceeding either funded account
+ok 139 - exact 20 STX cumulative fee boundary succeeds without exceeding either funded account
+  ---
+  duration_ms: 492.131333
+  type: 'test'
+  ...
+# Subtest: eight competing processes cannot claim one key for different digests
+ok 140 - eight competing processes cannot claim one key for different digests
+  ---
+  duration_ms: 124.81625
+  type: 'test'
+  ...
+# Subtest: a corrupt existing claim stops recovery instead of overwriting history
+ok 141 - a corrupt existing claim stops recovery instead of overwriting history
+  ---
+  duration_ms: 6.240916
+  type: 'test'
+  ...
+# Subtest: public chain responses reproduce all seven origin signatures, payloads, events, costs and final state offline
+ok 142 - public chain responses reproduce all seven origin signatures, payloads, events, costs and final state offline
+  ---
+  duration_ms: 96.415167
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongNetwork
+ok 143 - public verification rejects wrongNetwork
+  ---
+  duration_ms: 2.322208
+  type: 'test'
+  ...
+# Subtest: public verification rejects changedSource
+ok 144 - public verification rejects changedSource
+  ---
+  duration_ms: 1.625
+  type: 'test'
+  ...
+# Subtest: public verification rejects changedRegistry
+ok 145 - public verification rejects changedRegistry
+  ---
+  duration_ms: 1.470875
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongTxId
+ok 146 - public verification rejects wrongTxId
+  ---
+  duration_ms: 1.253875
+  type: 'test'
+  ...
+# Subtest: public verification rejects pending
+ok 147 - public verification rejects pending
+  ---
+  duration_ms: 1.331875
+  type: 'test'
+  ...
+# Subtest: public verification rejects vmAbort
+ok 148 - public verification rejects vmAbort
+  ---
+  duration_ms: 19.559667
+  type: 'test'
+  ...
+# Subtest: public verification rejects postConditionAbort
+ok 149 - public verification rejects postConditionAbort
+  ---
+  duration_ms: 20.168958
+  type: 'test'
+  ...
+# Subtest: public verification rejects reorg
+ok 150 - public verification rejects reorg
+  ---
+  duration_ms: 1.410542
+  type: 'test'
+  ...
+# Subtest: public verification rejects unanchored
+ok 151 - public verification rejects unanchored
+  ---
+  duration_ms: 1.448334
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongMicroblock
+ok 152 - public verification rejects wrongMicroblock
+  ---
+  duration_ms: 1.279458
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongSender
+ok 153 - public verification rejects wrongSender
+  ---
+  duration_ms: 1.270166
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongFee
+ok 154 - public verification rejects wrongFee
+  ---
+  duration_ms: 1.109416
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongNonce
+ok 155 - public verification rejects wrongNonce
+  ---
+  duration_ms: 1.154334
+  type: 'test'
+  ...
+# Subtest: public verification rejects tooFewConfirmations
+ok 156 - public verification rejects tooFewConfirmations
+  ---
+  duration_ms: 21.572541
+  type: 'test'
+  ...
+# Subtest: public verification rejects noncanonicalBlock
+ok 157 - public verification rejects noncanonicalBlock
+  ---
+  duration_ms: 1.884792
+  type: 'test'
+  ...
+# Subtest: public verification rejects mismatchedBlockHash
+ok 158 - public verification rejects mismatchedBlockHash
+  ---
+  duration_ms: 1.230834
+  type: 'test'
+  ...
+# Subtest: public verification rejects lyingResultRepr
+ok 159 - public verification rejects lyingResultRepr
+  ---
+  duration_ms: 1.089833
+  type: 'test'
+  ...
+# Subtest: public verification rejects alteredWire
+ok 160 - public verification rejects alteredWire
+  ---
+  duration_ms: 2.258292
+  type: 'test'
+  ...
+# Subtest: public verification rejects truncatedWire
+ok 161 - public verification rejects truncatedWire
+  ---
+  duration_ms: 19.017375
+  type: 'test'
+  ...
+# Subtest: public verification rejects trailingWire
+ok 162 - public verification rejects trailingWire
+  ---
+  duration_ms: 1.44275
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongEventTransaction
+ok 163 - public verification rejects wrongEventTransaction
+  ---
+  duration_ms: 14.433166
+  type: 'test'
+  ...
+# Subtest: public verification rejects missingPayout
+ok 164 - public verification rejects missingPayout
+  ---
+  duration_ms: 33.075166
+  type: 'test'
+  ...
+# Subtest: public verification rejects extraPayout
+ok 165 - public verification rejects extraPayout
+  ---
+  duration_ms: 33.759459
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongRecipient
+ok 166 - public verification rejects wrongRecipient
+  ---
+  duration_ms: 33.507042
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongAsset
+ok 167 - public verification rejects wrongAsset
+  ---
+  duration_ms: 31.168333
+  type: 'test'
+  ...
+# Subtest: public verification rejects wrongEventAmount
+ok 168 - public verification rejects wrongEventAmount
+  ---
+  duration_ms: 31.093291
+  type: 'test'
+  ...
+# Subtest: public verification rejects changedCost
+ok 169 - public verification rejects changedCost
+  ---
+  duration_ms: 31.674375
+  type: 'test'
+  ...
+# Subtest: public verification rejects changedContractLog
+ok 170 - public verification rejects changedContractLog
+  ---
+  duration_ms: 30.945208
+  type: 'test'
+  ...
+# Subtest: public verification rejects unexpectedAssetEvent
+ok 171 - public verification rejects unexpectedAssetEvent
+  ---
+  duration_ms: 31.591042
+  type: 'test'
+  ...
+# Subtest: public verification rejects changedVaultState
+ok 172 - public verification rejects changedVaultState
+  ---
+  duration_ms: 34.687667
+  type: 'test'
+  ...
+# Subtest: public verification rejects nonemptyVault
+ok 173 - public verification rejects nonemptyVault
+  ---
+  duration_ms: 31.729875
+  type: 'test'
+  ...
+# Subtest: public verification rejects changedDigest
+ok 174 - public verification rejects changedDigest
+  ---
+  duration_ms: 32.174042
+  type: 'test'
+  ...
+# Subtest: a reorganization during collection fails the final block recheck
+ok 175 - a reorganization during collection fails the final block recheck
+  ---
+  duration_ms: 31.287
+  type: 'test'
+  ...
+# Subtest: an unapproved path or write-shaped call is rejected before fetch
+ok 176 - an unapproved path or write-shaped call is rejected before fetch
+  ---
+  duration_ms: 0.258083
+  type: 'test'
+  ...
+# Subtest: public evidence rejects partial event page
+ok 177 - public evidence rejects partial event page
+  ---
+  duration_ms: 0.136458
+  type: 'test'
+  ...
+# Subtest: public evidence rejects fullUncounted event page
+ok 178 - public evidence rejects fullUncounted event page
+  ---
+  duration_ms: 0.0785
+  type: 'test'
+  ...
+# Subtest: public evidence rejects offset event page
+ok 179 - public evidence rejects offset event page
+  ---
+  duration_ms: 0.066291
+  type: 'test'
+  ...
+# Subtest: public evidence rejects malformed event page
+ok 180 - public evidence rejects malformed event page
+  ---
+  duration_ms: 0.062667
+  type: 'test'
+  ...
+# Subtest: read retries honor a bounded Retry-After, carry a timeout and never retry a write
+ok 181 - read retries honor a bounded Retry-After, carry a timeout and never retry a write
+  ---
+  duration_ms: 0.369583
+  type: 'test'
+  ...
+# Subtest: unsafe provider cooldown fails closed (999)
+ok 182 - unsafe provider cooldown fails closed (999)
+  ---
+  duration_ms: 0.086625
+  type: 'test'
+  ...
+# Subtest: unsafe provider cooldown fails closed (invalid)
+ok 183 - unsafe provider cooldown fails closed (invalid)
+  ---
+  duration_ms: 0.058792
+  type: 'test'
+  ...
+# Subtest: unsafe provider cooldown fails closed (-1)
+ok 184 - unsafe provider cooldown fails closed (-1)
+  ---
+  duration_ms: 0.18075
+  type: 'test'
+  ...
+# Subtest: persistent throttling, HTTP errors, malformed JSON and read failures cannot yield success
+ok 185 - persistent throttling, HTTP errors, malformed JSON and read failures cannot yield success
+  ---
+  duration_ms: 0.255333
+  type: 'test'
+  ...
+# Subtest: HTTP-date Retry-After is supported for bounded read retries
+ok 186 - HTTP-date Retry-After is supported for bounded read retries
+  ---
+  duration_ms: 0.122916
+  type: 'test'
+  ...
+# Subtest: read-only Clarity failures and invalid serialized values are rejected
+ok 187 - read-only Clarity failures and invalid serialized values are rejected
+  ---
+  duration_ms: 0.150375
+  type: 'test'
+  ...
+# Subtest: frozen transport reads block and vault through the fixed mainnet endpoint
+ok 188 - frozen transport reads block and vault through the fixed mainnet endpoint
+  ---
+  duration_ms: 17.471833
+  type: 'test'
+  ...
+# Subtest: frozen account transport refuses negativeNonce
+ok 189 - frozen account transport refuses negativeNonce
+  ---
+  duration_ms: 0.479
+  type: 'test'
+  ...
+# Subtest: frozen account transport refuses fractionalNonce
+ok 190 - frozen account transport refuses fractionalNonce
+  ---
+  duration_ms: 0.253833
+  type: 'test'
+  ...
+# Subtest: frozen account transport refuses lockedExceedsBalance
+ok 191 - frozen account transport refuses lockedExceedsBalance
+  ---
+  duration_ms: 0.336875
+  type: 'test'
+  ...
+# Subtest: frozen account transport refuses coreBalanceBehindIndex
+ok 192 - frozen account transport refuses coreBalanceBehindIndex
+  ---
+  duration_ms: 0.217333
+  type: 'test'
+  ...
+# Subtest: frozen token balance refuses (err u1)
+ok 193 - frozen token balance refuses (err u1)
+  ---
+  duration_ms: 1.413458
+  type: 'test'
+  ...
+# Subtest: frozen token balance refuses (ok true)
+ok 194 - frozen token balance refuses (ok true)
+  ---
+  duration_ms: 0.441458
+  type: 'test'
+  ...
+# Subtest: frozen transport never treats a server failure as an absent deployment
+ok 195 - frozen transport never treats a server failure as an absent deployment
+  ---
+  duration_ms: 0.096333
+  type: 'test'
+  ...
+# Subtest: frozen transport stops after three throttled reads
+ok 196 - frozen transport stops after three throttled reads
+  ---
+  duration_ms: 1.128333
+  type: 'test'
+  ...
+# Subtest: frozen transport refuses unsupported cooldown 60
+ok 197 - frozen transport refuses unsupported cooldown 60
+  ---
+  duration_ms: 0.114792
+  type: 'test'
+  ...
+# Subtest: frozen transport refuses unsupported cooldown invalid
+ok 198 - frozen transport refuses unsupported cooldown invalid
+  ---
+  duration_ms: 0.130584
+  type: 'test'
+  ...
+# Subtest: frozen read transport propagates timeout uncertainty
+ok 199 - frozen read transport propagates timeout uncertainty
+  ---
+  duration_ms: 0.09725
+  type: 'test'
+  ...
+1..199
+# tests 199
+# suites 0
+# pass 199
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8274.069833
+# start of coverage report
+# --------------------------------------------------------------------------------------------
+# file                          | line % | branch % | funcs % | uncovered lines
+# --------------------------------------------------------------------------------------------
+# mainnet                       |        |          |         |
+#  snapshot                     |        |          |         |
+#   mainnet                     |        |          |         |
+#    execution.mjs              | 100.00 |    98.33 |  100.00 |
+#    execution.test.mjs         |  99.67 |    97.01 |  100.00 | 47
+#    integration.test.mjs       | 100.00 |    92.86 |  100.00 |
+#    mainnet-api.mjs            |  98.68 |    90.91 |   93.75 | 44
+#    mainnet-api.test.mjs       | 100.00 |   100.00 |  100.00 |
+#   source                      |        |          |         |
+#    vault                      |        |          |         |
+#     src                       |        |          |         |
+#      journal.mjs              |  97.44 |    90.00 |   75.00 | 21-22
+#      lamport.mjs              | 100.00 |    94.12 |  100.00 |
+#      vault.mjs                | 100.00 |    64.52 |   93.33 |
+#      wots.mjs                 |  63.33 |   100.00 |    0.00 | 19-22 30-35 42-45 48-50 53-57
+#  test                         |        |          |         |
+#   clarity-edges.test.mjs      | 100.00 |   100.00 |  100.00 |
+#   clarity-fixture.mjs         |  97.26 |    92.86 |   90.00 | 46-47
+#   evidence.test.mjs           | 100.00 |    97.30 |  100.00 |
+#   executor-edges.test.mjs     | 100.00 |   100.00 |  100.00 |
+#   executor-fixture.mjs        |  99.00 |    84.21 |  100.00 | 48
+#   journal-race.test.mjs       | 100.00 |   100.00 |  100.00 |
+#   public-verifier.test.mjs    | 100.00 |   100.00 |   97.33 |
+#   transport-edges.test.mjs    | 100.00 |   100.00 |  100.00 |
+#  verify-mainnet.mjs           |  93.88 |    94.29 |   94.12 | 40 140-147
+#  verify-snapshot.mjs          | 100.00 |    98.04 |  100.00 |
+# --------------------------------------------------------------------------------------------
+# all files                     |  98.28 |    95.90 |   96.53 |
+# --------------------------------------------------------------------------------------------
+# end of coverage report

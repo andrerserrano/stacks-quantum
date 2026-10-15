@@ -1,0 +1,298 @@
+TAP version 13
+# Subtest: seven mainnet transactions: real SDK signatures, independent carrier, canonical evidence and one durable Lamport claim
+ok 1 - seven mainnet transactions: real SDK signatures, independent carrier, canonical evidence and one durable Lamport claim
+  ---
+  duration_ms: 487.971833
+  type: 'test'
+  ...
+# Subtest: unfunded operator cannot access custody, initialize a journal, sign or broadcast
+ok 2 - unfunded operator cannot access custody, initialize a journal, sign or broadcast
+  ---
+  duration_ms: 18.42225
+  type: 'test'
+  ...
+# Subtest: operator sBTC funding is required before spending the first deployment fee
+ok 3 - operator sBTC funding is required before spending the first deployment fee
+  ---
+  duration_ms: 18.668708
+  type: 'test'
+  ...
+# Subtest: wrong network stops before custody access
+ok 4 - wrong network stops before custody access
+  ---
+  duration_ms: 16.005458
+  type: 'test'
+  ...
+# Subtest: fee above the whole cap stops before any signature
+ok 5 - fee above the whole cap stops before any signature
+  ---
+  duration_ms: 18.839125
+  type: 'test'
+  ...
+# Subtest: fee cap includes every previously signed transaction, not just the next fee
+ok 6 - fee cap includes every previously signed transaction, not just the next fee
+  ---
+  duration_ms: 139.78675
+  type: 'test'
+  ...
+# Subtest: initial preflight is read-only and uses explicit first-call bids without claiming any key
+ok 7 - initial preflight is read-only and uses explicit first-call bids without claiming any key
+  ---
+  duration_ms: 6.919166
+  type: 'test'
+  ...
+# Subtest: missing withdrawal fee quote never claims the one-time key
+ok 8 - missing withdrawal fee quote never claims the one-time key
+  ---
+  duration_ms: 260.283709
+  type: 'test'
+  ...
+# Subtest: wrong on-chain mainnet digest never claims the one-time key
+ok 9 - wrong on-chain mainnet digest never claims the one-time key
+  ---
+  duration_ms: 265.746375
+  type: 'test'
+  ...
+# Subtest: lost reply after acceptance reconciles the existing pending tx without another signature
+ok 10 - lost reply after acceptance reconciles the existing pending tx without another signature
+  ---
+  duration_ms: 60.244791
+  type: 'test'
+  ...
+# Subtest: lost reply before acceptance rebroadcasts exactly the saved bytes without custody access
+ok 11 - lost reply before acceptance rebroadcasts exactly the saved bytes without custody access
+  ---
+  duration_ms: 65.651042
+  type: 'test'
+  ...
+# Subtest: dropped transaction is retried as the same transaction, with the same fee reservation
+ok 12 - dropped transaction is retried as the same transaction, with the same fee reservation
+  ---
+  duration_ms: 62.790875
+  type: 'test'
+  ...
+# Subtest: a consumed account nonce with an unknown transaction stops rebroadcast
+ok 13 - a consumed account nonce with an unknown transaction stops rebroadcast
+  ---
+  duration_ms: 63.84075
+  type: 'test'
+  ...
+# Subtest: success with too few canonical confirmations cannot advance
+ok 14 - success with too few canonical confirmations cannot advance
+  ---
+  duration_ms: 64.657042
+  type: 'test'
+  ...
+# Subtest: a predecessor reorganization stops all subsequent signing
+ok 15 - a predecessor reorganization stops all subsequent signing
+  ---
+  duration_ms: 92.349542
+  type: 'test'
+  ...
+# Subtest: post-condition abort consumes a counted fee but cannot be mistaken for payout or rotate the Lamport key
+ok 16 - post-condition abort consumes a counted fee but cannot be mistaken for payout or rotate the Lamport key
+  ---
+  duration_ms: 388.571416
+  type: 'test'
+  ...
+# Subtest: a modified stored payload is rejected even if its signature, txid and local wire hash were recomputed
+ok 17 - a modified stored payload is rejected even if its signature, txid and local wire hash were recomputed
+  ---
+  duration_ms: 65.4595
+  type: 'test'
+  ...
+# Subtest: mempool conflicts stop before custody access
+ok 18 - mempool conflicts stop before custody access
+  ---
+  duration_ms: 14.513834
+  type: 'test'
+  ...
+# Subtest: a deployed source mismatch stops before funding or subsequent deployment
+ok 19 - a deployed source mismatch stops before funding or subsequent deployment
+  ---
+  duration_ms: 56.5375
+  type: 'test'
+  ...
+# Subtest: wrong token-transfer event cannot satisfy deposit evidence
+ok 20 - wrong token-transfer event cannot satisfy deposit evidence
+  ---
+  duration_ms: 215.502916
+  type: 'test'
+  ...
+# Subtest: an inconsistent actual token balance and internal ledger stop before deposit
+ok 21 - an inconsistent actual token balance and internal ledger stop before deposit
+  ---
+  duration_ms: 179.490083
+  type: 'test'
+  ...
+# Subtest: missing journal after initialization fails closed instead of creating an empty signer history
+ok 22 - missing journal after initialization fails closed instead of creating an empty signer history
+  ---
+  duration_ms: 63.667583
+  type: 'test'
+  ...
+# Subtest: missing state with a surviving initialization marker requires recovery
+ok 23 - missing state with a surviving initialization marker requires recovery
+  ---
+  duration_ms: 65.255958
+  type: 'test'
+  ...
+# Subtest: a second executor cannot run while the single-writer lock exists
+ok 24 - a second executor cannot run while the single-writer lock exists
+  ---
+  duration_ms: 8.319917
+  type: 'test'
+  ...
+# Subtest: persistent claim for a different digest prevents Lamport signing
+ok 25 - persistent claim for a different digest prevents Lamport signing
+  ---
+  duration_ms: 300.540875
+  type: 'test'
+  ...
+# Subtest: withdrawal retry preserves the exact saved Lamport authorization and ordinary signed bytes
+ok 26 - withdrawal retry preserves the exact saved Lamport authorization and ordinary signed bytes
+  ---
+  duration_ms: 382.532417
+  type: 'test'
+  ...
+# Subtest: fee too large for the submitter reserve stops before the operator sends its top-up
+ok 27 - fee too large for the submitter reserve stops before the operator sends its top-up
+  ---
+  duration_ms: 230.999458
+  type: 'test'
+  ...
+# Subtest: only NoEstimateAvailable enables the exact reviewed first-call bids, all counted against the cap
+ok 28 - only NoEstimateAvailable enables the exact reviewed first-call bids, all counted against the cap
+  ---
+  duration_ms: 384.760667
+  type: 'test'
+  ...
+# Subtest: a deployment without an estimate cannot borrow a first-call fee policy
+ok 29 - a deployment without an estimate cannot borrow a first-call fee policy
+  ---
+  duration_ms: 16.55975
+  type: 'test'
+  ...
+# Subtest: lost authorization file stops a withdrawal retry without another signature
+ok 30 - lost authorization file stops a withdrawal retry without another signature
+  ---
+  duration_ms: 351.887875
+  type: 'test'
+  ...
+# Subtest: lost journal claim stops a withdrawal retry without replacing signing history
+ok 31 - lost journal claim stops a withdrawal retry without replacing signing history
+  ---
+  duration_ms: 340.149791
+  type: 'test'
+  ...
+# Subtest: a transaction whose block hash no longer matches the canonical block cannot advance
+ok 32 - a transaction whose block hash no longer matches the canonical block cannot advance
+  ---
+  duration_ms: 60.762042
+  type: 'test'
+  ...
+# Subtest: an unanchored receipt cannot satisfy the confirmation policy
+ok 33 - an unanchored receipt cannot satisfy the confirmation policy
+  ---
+  duration_ms: 64.097583
+  type: 'test'
+  ...
+# Subtest: a wrong token asset in the withdrawal event cannot mark the demo complete
+ok 34 - a wrong token asset in the withdrawal event cannot mark the demo complete
+  ---
+  duration_ms: 363.574917
+  type: 'test'
+  ...
+# Subtest: recipient balance evidence must independently agree with the payout event
+ok 35 - recipient balance evidence must independently agree with the payout event
+  ---
+  duration_ms: 348.494208
+  type: 'test'
+  ...
+# Subtest: deployed sBTC code: Lamport payout, tampering, replay, key state and persistent signer guard
+ok 36 - deployed sBTC code: Lamport payout, tampering, replay, key state and persistent signer guard
+  ---
+  duration_ms: 340.583791
+  type: 'test'
+  ...
+# Subtest: vault fails closed when its pinned verifier returns (ok false)
+ok 37 - vault fails closed when its pinned verifier returns (ok false)
+  ---
+  duration_ms: 195.510541
+  type: 'test'
+  ...
+# Subtest: vault fails closed when its pinned verifier returns (err u777)
+ok 38 - vault fails closed when its pinned verifier returns (err u777)
+  ---
+  duration_ms: 194.495
+  type: 'test'
+  ...
+# Subtest: sBTC transfer failure rolls back vault balance, nonce and key
+ok 39 - sBTC transfer failure rolls back vault balance, nonce and key
+  ---
+  duration_ms: 217.455625
+  type: 'test'
+  ...
+# Subtest: only the node NoEstimateAvailable error is exposed as an explicit first-call fee case
+ok 40 - only the node NoEstimateAvailable error is exposed as an explicit first-call fee case
+  ---
+  duration_ms: 26.853959
+  type: 'test'
+  ...
+# Subtest: fee database errors are never converted into a first-call bid
+ok 41 - fee database errors are never converted into a first-call bid
+  ---
+  duration_ms: 1.06675
+  type: 'test'
+  ...
+# Subtest: token read-only transport decodes the response and uses the fixed mainnet endpoint
+ok 42 - token read-only transport decodes the response and uses the fixed mainnet endpoint
+  ---
+  duration_ms: 0.908375
+  type: 'test'
+  ...
+# Subtest: account transport subtracts locked STX and checks independent nonce views
+ok 43 - account transport subtracts locked STX and checks independent nonce views
+  ---
+  duration_ms: 0.475166
+  type: 'test'
+  ...
+# Subtest: inconsistent account nonce views stop instead of selecting a nonce from one index
+ok 44 - inconsistent account nonce views stop instead of selecting a nonce from one index
+  ---
+  duration_ms: 1.239083
+  type: 'test'
+  ...
+# Subtest: partial paginated transfer evidence cannot pass verification
+ok 45 - partial paginated transfer evidence cannot pass verification
+  ---
+  duration_ms: 0.294417
+  type: 'test'
+  ...
+# Subtest: missing transactions and missing contract sources are explicit null responses
+ok 46 - missing transactions and missing contract sources are explicit null responses
+  ---
+  duration_ms: 0.180917
+  type: 'test'
+  ...
+# Subtest: read-only 429 responses are retried with a bounded cooldown
+ok 47 - read-only 429 responses are retried with a bounded cooldown
+  ---
+  duration_ms: 0.309542
+  type: 'test'
+  ...
+# Subtest: broadcast 429 responses are not retried by the transport
+ok 48 - broadcast 429 responses are not retried by the transport
+  ---
+  duration_ms: 0.338875
+  type: 'test'
+  ...
+1..48
+# tests 48
+# suites 0
+# pass 48
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5631.637333

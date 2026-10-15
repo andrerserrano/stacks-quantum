@@ -1,0 +1,22 @@
+{
+  "auditedAt": "2026-10-15T21:48:19.918604+00:00",
+  "candidateSha256": "f20785dfe1a21e3f8098cfa2268352f5ed07ebf8074ebaa4dc0a161a831535b4",
+  "requirements": {
+    "threeDedicatedAccountsAndCustodyVerified": true,
+    "mainnetContractsDeployedAndSourceHashesMatch": true,
+    "sevenCanonicalSuccessesAtLeastSixStacksConfirmations": true,
+    "oneThousandSatsOfOfficialMainnetSbtcPaid": true,
+    "independentCarrierAndPinnedRecipient": true,
+    "vaultDrainedNonceOneSuccessorInstalled": true,
+    "oneDurableKeyClaimAndAuthorizationRetained": true,
+    "allFeesWithinTwentyStx": true,
+    "original105AndCandidate48TestsPassed": true,
+    "freshBundle48TestsPassed": true,
+    "nativeProposalAndMarkdownSynced": true
+  },
+  "actualFeesMicroStx": "4114578",
+  "unusedFeeBudgetMicroStx": "15885422",
+  "withdrawalTxid": "0xb983fa37d30d5ece2c2d3d539885cf5d6f2394245a733d76820a6fa9ca6a5b97",
+  "executionEvidenceSha256": "91c60f925d414a4f5c1dca57a147c9921095ea324e8ff17bffc9668877d213fa",
+  "remainingRequiredOnChainWork": []
+}
