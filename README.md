@@ -1,75 +1,75 @@
-# Hash-based signatures on Stacks
+# Lamport sBTC vault on Stacks mainnet
 
-Bitcoin and Stacks rely on signatures that a sufficiently powerful quantum computer could break. Preparing for that risk starts with testing alternative ways to authorize spending.
+On 15 October 2026, a Clarity vault verified a Lamport one-time signature and released **1,000 sats of official mainnet sBTC** to the signed recipient. A separate Stacks account submitted the withdrawal and paid its fee.
 
-This experiment tests whether a Clarity contract can verify hash-based signatures for vault withdrawals without protocol changes. The goal is to give Engineering a working example, measured costs, and clear limitations to assess before choosing the next approach.
+The seven-transaction demonstration completed successfully with **4.114578 STX in total fees**. The vault is empty and retired operationally. Do not send it more funds.
 
-**Experimental proof of concept.** On 15 October 2026, a mainnet Lamport withdrawal paid 1,000 sats of official sBTC. All seven demo transactions succeeded; fees totaled 4.114578 STX. The mainnet vault is empty and retired operationally. No independent cryptographic audit or production readiness is claimed.
-
-Start with the [mainnet result](mainnet/Mainnet-demo-result.md) and [engineering review guide](mainnet/README.md). The original testnet implementation and results remain below for comparison.
-
-## Review the work
-
-| Resource | Purpose |
-| --- | --- |
-| [Mainnet result and evidence](mainnet/Mainnet-demo-result.md) | Seven confirmed transactions, official sBTC payout, fees and final vault state. |
-| [Mainnet source and tests](mainnet/README.md) | Exact executed candidate, reproducible local tests and review instructions. |
-| [Mainnet proposal](mainnet/Mainnet-sBTC-Lamport-technical-proposal.md) | Scoped design, execution update and Lamport format appendix. |
-| [PRD](https://docs.google.com/document/d/1gDLMFcaVvd-T91cFN9qYM4vl3W83feWAF22VHPndSnI/edit) | Research, pilot scope, and proposed next steps. |
-| [Technical spec](https://docs.google.com/document/d/1wi2fEe-3VggqgEIJ24HKG12myg7DU-RYRIxp9HmYgic/edit) | Design, risks, and open questions. |
-| [Demo](https://pq-vault-demo-l4qz6ho3t-andre-serranos-projects.vercel.app/) | Transactions and a live signature check. Protected preview; reviewers need access. |
-| [Testnet results](vault/results/RUN.md) | All 22 transactions, explorer links, and measured costs. |
-| [Review record](vault/REVIEW.md) | Issues found, fixes, and remaining risks. |
+[View the mainnet withdrawal](https://explorer.hiro.so/txid/0xb983fa37d30d5ece2c2d3d539885cf5d6f2394245a733d76820a6fa9ca6a5b97?chain=mainnet) or read the [full result](mainnet/Mainnet-demo-result.md).
 
 ## How it works
 
-1. A script signs the amount, recipient, and next key using Lamport or a custom WOTS+ variant.
-2. Any Stacks account submits the request and pays the transaction fee.
-3. The vault checks the signature, pays the signed recipient, and replaces its key.
+1. The operator opens the vault with a Lamport key commitment and deposits sBTC through its accounting function.
+2. An off-chain signer authorizes the chain, contract, vault, nonce, asset, amount, recipient and successor key. It durably records the instruction before releasing the signature.
+3. A separate account submits the signed instruction and pays the ordinary Stacks transaction fee.
+4. The vault verifies the authorization, transfers sBTC, increments its nonce and installs the successor key atomically.
 
-The 9 October 2026 testnet run paid three withdrawals and refused six requests: missing or incorrect signatures, changed payment details, and replay. The attack cases used WOTS+; Lamport also had a successful withdrawal. Both schemes are covered by local tests.
+The submitting account cannot change the signed payment details. Each Lamport key authorizes only one distinct instruction; retries reuse the stored authorization. Lamport's simple verifier makes the spending rule easy to inspect, with a larger signature accepted for this single-withdrawal experiment.
 
-| STX withdrawal | WOTS+ | Lamport |
-| --- | ---: | ---: |
-| Transaction size | 2,882 bytes | 19,313 bytes |
-| Runtime | 1,209,004 units | 1,060,098 units |
+## Mainnet result
 
-The WOTS+ withdrawal used 0.024% of the runtime budget and 0.03% of allowed reads per tenure. These measurements do not establish production fees or throughput.
+| Measure | Observed result |
+| --- | ---: |
+| sBTC withdrawn | 1,000 sats |
+| Successful transactions | 7 |
+| Total transaction fees | 4.114578 STX |
+| Withdrawal transaction size | 19,357 bytes |
+| Withdrawal runtime | 1,062,385 units |
+| Withdrawal reads / writes | 13 / 3 |
+| Final vault balance / nonce | 0 sBTC / 1 |
 
-## Limits
+These are measurements from the completed run, not guarantees of production fees or throughput. All seven transactions passed six canonical Stacks block confirmations; a later public recheck observed at least 238 confirmations.
 
-- The vault tests withdrawal authorization. Stacks transaction signing, block approval, and sBTC’s Bitcoin reserve remain unchanged.
-- The original testnet sBTC path uses a test token. The separate mainnet candidate completed one withdrawal using the official deployed sBTC token; broader integration and recovery remain unproven.
-- Each key must sign only one distinct request. The signer records signatures to prevent reuse; restoring the secret without that record can lose the safeguard.
-- The custom signature construction has not had independent cryptographic review. Wallet integration and recovery remain open.
+## Source and evidence
 
-Lamport and WOTS+ are comparison cases. Their size and key-management constraints are findings for Engineering to assess; the long-term design remains open.
+| Resource | Contents |
+| --- | --- |
+| [Mainnet review guide](mainnet/README.md) | Exact execution snapshot, verification instructions and key handling. |
+| [Deployed contracts](mainnet/snapshot/mainnet/contracts/) | Trait, Lamport verifier and vault bound to the official sBTC token. |
+| [Technical proposal](mainnet/Mainnet-sBTC-Lamport-technical-proposal.md) | Design, execution update and scope. |
+| [Lamport format](mainnet/Lamport-format-appendix.md) | Key derivation, commitment, pair ordering, digest bits and signature encoding. |
+| [Execution evidence](mainnet/evidence/mainnet-execution.json) | Transaction links, canonical blocks, transfers, fees and final state. |
+| [Engineering audit](mainnet/AUDIT.md) | Requirements, failure scenarios, tests and verification limits. |
 
-## Run locally
+Vault: `SP1BE4QPD9XK2A2TDJE7B40S00J9WZCW280ET3JBP.pq-vault`
+
+Token: `SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token`
+
+## Verify locally
 
 Requires Node.js 20 or later. From the repository root:
 
 ```bash
-cd vault
-npm ci
-npm test
-npm run demo
+node mainnet/verify-snapshot.mjs
+npm ci --prefix vault
+npm ci --prefix mainnet/snapshot/source/vault
+npm test --prefix vault
+node --test mainnet/snapshot/mainnet/*.test.mjs mainnet/test/*.test.mjs
 ```
 
-The suite contains 105 tests. The demo runs in a local Stacks simulation and sends no testnet transactions. Use `npm run demo -- lamport` to compare Lamport.
+All **304 tests** passed locally and in [CI on Linux and macOS](https://github.com/andrerserrano/stacks-quantum/actions/runs/38816128410). Coverage includes signature tampering, replay, verifier failures, token-transfer rollback, one-time-key persistence, crash recovery, concurrent execution, fee limits and corrupted evidence. Rejection cases run locally on simnet; the mainnet run demonstrates the successful payout.
 
-To view the page, run this from the repository root with Python 3:
+After installing dependencies, independently recheck the public mainnet transactions and current vault state:
 
 ```bash
-python3 -m http.server 4173 --directory site
+node mainnet/verify-mainnet.mjs
 ```
 
-Open [localhost:4173](http://localhost:4173/). The page displays recorded transactions and makes live read-only calls to testnet. It holds no secret keys and sends no transactions.
+This verifier makes read-only requests and needs no wallet, private keys or operator state. It checks public transaction signatures, payloads, post-conditions, deployed sources, canonical blocks, events, costs and vault state against the recorded plan. Verification relies on a trusted RPC/indexer. Later account or vault activity can change current balances and state.
 
-More detail: [vault instructions](vault/README.md), [site instructions](site/README.md), and [simulation costs](vault/results/COSTS.md).
+## Scope and limits
 
-## Questions for Engineering
+This is an experimental demonstration of hash-based withdrawal authorization. It does not change Stacks transaction signing, consensus or the security of sBTC's Bitcoin reserve, and it is not an sBTC redemption into native Bitcoin.
 
-- What is wrong or missing in the verifier, key rotation, and signing safeguards?
-- Which approach should we test next, considering size, verification cost, and wallet usability?
-- What should the next milestone demonstrate, and what cryptography review does it need?
+The implementation has no production cryptographic audit, wallet recovery or general-purpose wallet integration. The contract has no admin recovery or upgrade path. Retirement is operational: it does not disable deposits, and direct token transfers bypass the vault ledger. Keys must never authorize a second distinct instruction.
+
+The original testnet implementation and recorded site remain under [`vault/`](vault/README.md) and [`site/`](site/README.md) as historical supporting work. Mainnet source, tests and evidence are under [`mainnet/`](mainnet/README.md).

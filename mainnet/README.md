@@ -58,7 +58,7 @@ The audit adds 151 tests for malformed inputs, crash windows, concurrent executi
 
 ## Review limits and key handling
 
-Lamport keeps verification simple enough to inspect and has less exposure from accidental reuse than the custom WOTS comparison, but it remains strictly one-time. The larger signature was acceptable for this single-withdrawal demo. A key must authorize only one distinct digest. An exact retry may reuse the already stored authorization and transaction bytes; changing any signed field requires a fresh key and a newly reviewed plan.
+Lamport keeps verification simple enough to inspect and explain. The larger signature was acceptable for this single-withdrawal demo. A key must authorize only one distinct digest. An exact retry may reuse the already stored authorization and transaction bytes; changing any signed field requires a fresh key and a newly reviewed plan.
 
 The executor reserves the key in a durable journal before signing, persists authorization and transaction bytes before broadcast, waits for canonical prerequisites and caps total fees. The completed run's private claim and signing state must not be reset. Account private keys, the Lamport master and the operator's authorization/state files and private journal are excluded. Public transaction bytes contain the already published signature. Wallet recovery and safe repeated public use remain outside this demonstration.
 
