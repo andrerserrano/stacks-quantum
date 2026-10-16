@@ -1,10 +1,16 @@
-# Lamport sBTC vault on Stacks mainnet
+# Hash-based signatures in Clarity
 
-On 15 October 2026, a Clarity vault verified a Lamport one-time signature and released **1,000 sats of official mainnet sBTC** to the signed recipient. A separate Stacks account submitted the withdrawal and paid its fee.
+Stacks can verify hash-based signatures directly in Clarity. This project demonstrates that capability with a Lamport one-time signature authorizing an sBTC withdrawal on mainnet.
 
-The seven-transaction demonstration completed successfully with **4.114578 STX in total fees**.
+On 15 October 2026, the vault verified a Lamport signature and released **1,000 sats of sBTC** to the signed recipient.
 
-[View the mainnet withdrawal](https://explorer.hiro.so/txid/0xb983fa37d30d5ece2c2d3d539885cf5d6f2394245a733d76820a6fa9ca6a5b97?chain=mainnet) or read the [full result](mainnet/Mainnet-demo-result.md).
+[View the mainnet withdrawal](https://explorer.hiro.so/txid/0xb983fa37d30d5ece2c2d3d539885cf5d6f2394245a733d76820a6fa9ca6a5b97?chain=mainnet) or read the [full result](mainnet/Mainnet-demo-result.md), including transaction details and execution costs.
+
+## What this demonstrates
+
+A Clarity contract can define and enforce its own spending authorization. Here, the vault releases funds only after verifying a Lamport signature against a stored key commitment. A separate Stacks account submits the transaction and pays its fee; that account's signature alone cannot authorize the withdrawal.
+
+Lamport signatures use hash-based, one-time keys. The verifier uses Clarity's existing SHA-256 support, so this demonstration required no new opcode or protocol upgrade. It provides a working reference for post-quantum contract wallets on Stacks. Production use would also need reliable key management, recovery and further security review.
 
 ## How it works
 
@@ -15,24 +21,12 @@ The seven-transaction demonstration completed successfully with **4.114578 STX i
 
 The submitting account cannot change the signed payment details. Each Lamport key authorizes only one distinct instruction; retries reuse the stored authorization. Lamport's simple verifier makes the spending rule easy to inspect, with a larger signature accepted for this single-withdrawal experiment.
 
-## Mainnet result
-
-| Measure | Observed result |
-| --- | ---: |
-| sBTC withdrawn | 1,000 sats |
-| Successful transactions | 7 |
-| Total transaction fees | 4.114578 STX |
-| Withdrawal transaction size | 19,357 bytes |
-| Withdrawal runtime | 1,062,385 units |
-| Withdrawal reads / writes | 13 / 3 |
-| Final vault balance / nonce | 0 sBTC / 1 |
-
 ## Source and evidence
 
 | Resource | Contents |
 | --- | --- |
 | [Mainnet review guide](mainnet/README.md) | Exact execution snapshot, verification instructions and key handling. |
-| [Deployed contracts](mainnet/snapshot/mainnet/contracts/) | Trait, Lamport verifier and vault bound to the official sBTC token. |
+| [Deployed contracts](mainnet/snapshot/mainnet/contracts/) | Trait, Lamport verifier and vault bound to the mainnet sBTC token. |
 | [Technical proposal](mainnet/Mainnet-sBTC-Lamport-technical-proposal.md) | Design, execution update and scope. |
 | [Lamport format](mainnet/Lamport-format-appendix.md) | Key derivation, commitment, pair ordering, digest bits and signature encoding. |
 | [Execution evidence](mainnet/evidence/mainnet-execution.json) | Transaction links, canonical blocks, transfers, fees and final state. |
